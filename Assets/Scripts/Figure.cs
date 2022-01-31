@@ -6,8 +6,10 @@ using UnityEngine;
 public class Figure : MonoBehaviour
 {
     private Manager _manager;
+
+    [SerializeField] private GameObject selector;
     
-    [SerializeField] public Vector2 CurrentPosition { get; set; }
+    [SerializeField] private Vector2 CurrentPosition { get; set; }
     [SerializeField] private float currentY;
     
     private void Start()
@@ -15,23 +17,27 @@ public class Figure : MonoBehaviour
         currentY = gameObject.transform.position.y;
         _manager = Manager.Instance;
         CurrentPosition = new Vector2(gameObject.transform.position.x, gameObject.transform.position.z);
-        _manager.currentFigure = this.gameObject;
+
+        _manager.OnCurrentFigureChanged += HideSelector;
     }
 
-    private bool isMove = false;
-    
     private void Update()
     {
         
     }
 
-    public void Move(Vector2 target)
-    {
+    public void Move(Vector2 target) {
         transform.position = new Vector3(target.x, currentY, target.y);
     }
 
-    private void OnMouseDown()
-    {
-        // Move(new Vector2(2,2));
+    private void OnMouseDown() {
+        _manager.CurrentFigure = this;
+        selector.gameObject.SetActive(true);
+    }
+    
+    private void HideSelector() {
+        if (_manager.CurrentFigure != this) {
+            selector.gameObject.SetActive(false);
+        }
     }
 }
