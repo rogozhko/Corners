@@ -5,17 +5,23 @@ using UnityEngine;
 
 public class Cell : MonoBehaviour
 {
+    private Manager _manager;
+    
     private enum State
     {
         Idle,
         Select
     }
 
-
     public Vector2 Coordinates { get; set; }
+    
+    private void Awake() {
+        _manager = Manager.Instance;
+    }
 
     void OnMouseDown()
     {
-        Debug.Log(Coordinates);
+        _manager.CheckIsMove(Coordinates);
+        // Debug.Log(Coordinates);
     }
 }

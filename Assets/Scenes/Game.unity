@@ -723,6 +723,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1707573553}
   - component: {fileID: 1707573554}
+  - component: {fileID: 1707573555}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -754,6 +755,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b57ac253695fccb4e80b559009558f6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1707573555
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1707573552}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 532c6ad5e806f654493ae75b6a353f94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   cellPrefab: {fileID: 6257668201283906961, guid: cfeb2e4f363e1334080517ddbab928ec,

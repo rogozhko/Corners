@@ -5,52 +5,33 @@ using UnityEngine;
 
 public class Figure : MonoBehaviour
 {
-    private enum Direction {
-        Left,
-        Right,
-        Up,
-        Down
-    }
+    private Manager _manager;
+    
+    [SerializeField] public Vector2 CurrentPosition { get; set; }
+    [SerializeField] private float currentY;
     
     private void Start()
     {
-        
+        currentY = gameObject.transform.position.y;
+        _manager = Manager.Instance;
+        CurrentPosition = new Vector2(gameObject.transform.position.x, gameObject.transform.position.z);
+        _manager.currentFigure = this.gameObject;
     }
 
+    private bool isMove = false;
+    
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.A)) Shift(Direction.Left);
-        if (Input.GetKeyDown(KeyCode.D)) Shift(Direction.Right);
-        if (Input.GetKeyDown(KeyCode.W)) Shift(Direction.Up);
-        if (Input.GetKeyDown(KeyCode.S)) Shift(Direction.Down);
+        
     }
 
-    private void Shift(Direction direction)
+    public void Move(Vector2 target)
     {
-        var currentPos = gameObject.transform.position;
-        var posZ = currentPos.z;
-        var posX = currentPos.x;
-        
-        if (direction == Direction.Left) {
-            posZ -= 1;
-            gameObject.transform.position = new Vector3(currentPos.x, currentPos.y, posZ);
-        }
-        if (direction == Direction.Right) {
-            posZ += 1;
-            gameObject.transform.position = new Vector3(currentPos.x, currentPos.y, posZ);
-        }
-        if (direction == Direction.Up) {
-            posX -= 1;
-            gameObject.transform.position = new Vector3(posX, currentPos.y, currentPos.z);
-        }
-        if (direction == Direction.Down) {
-            posX += 1;
-            gameObject.transform.position = new Vector3(posX, currentPos.y, currentPos.z);
-        }
+        transform.position = new Vector3(target.x, currentY, target.y);
     }
 
     private void OnMouseDown()
     {
-        Debug.Log("Figure");
+        // Move(new Vector2(2,2));
     }
 }
