@@ -16,11 +16,11 @@ public class GameField : MonoBehaviour
 
     private void Start()
     {
-        CreateGameField();
+        // CreateGameField();
     }
     
     
-    private void CreateGameField()
+    public void CreateGameField()
     {
         GameObject gameField = new GameObject("GameField");
 

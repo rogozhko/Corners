@@ -18,7 +18,7 @@ public class Figure : MonoBehaviour
     {
         currentY = gameObject.transform.position.y;
         _manager = Manager.Instance;
-
+        
         _manager.OnCurrentFigureChanged += HideSelector;
         UpdatePosition();
     }
