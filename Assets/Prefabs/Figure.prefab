@@ -187,4 +187,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selector: {fileID: 1881992125522584632}
+  _materials:
+  - {fileID: 2100000, guid: 0ff15d8c29bf7dc4f996e1776414a7f7, type: 2}
+  - {fileID: 2100000, guid: 3b8ef418afe8c3a4ab34b7af797fe916, type: 2}
   currentY: 0

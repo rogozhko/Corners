@@ -5,7 +5,10 @@ using UnityEngine;
 public class GameField : MonoBehaviour
 {
     [SerializeField] private GameObject cellPrefab;
-    private Color _color = new Color(215, 215, 215);
+
+    [SerializeField] private Material material1;
+    [SerializeField] private Material material2;
+    
     private bool checkerColor = true;
 
     private int fieldDimention = 8;
@@ -29,8 +32,13 @@ public class GameField : MonoBehaviour
 
                 cell.transform.position = new Vector3(i, cell.transform.position.y, j);
                 
-                if (checkerColor) {
-                    cell.GetComponent<MeshRenderer>().material.color = _color;
+                if (checkerColor)
+                {
+                    cell.GetComponent<MeshRenderer>().material = material1;
+                }
+                else
+                {
+                    cell.GetComponent<MeshRenderer>().material = material2;
                 }
 
                 checkerColor = !checkerColor;
