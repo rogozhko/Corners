@@ -758,8 +758,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CurrentState: 0
-  figurePrefab: {fileID: 8502750581116169833, guid: 49a52213870bd7f479d9451da6fe635a,
-    type: 3}
 --- !u!114 &1707573555
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -772,7 +770,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 532c6ad5e806f654493ae75b6a353f94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cellPrefab: {fileID: 6257668201283906961, guid: cfeb2e4f363e1334080517ddbab928ec,
-    type: 3}
   material1: {fileID: 2100000, guid: 9f4c508fb447e2d4285f8d8162ed6c8f, type: 2}
   material2: {fileID: 2100000, guid: 9990e9a0aed016d41b529172465274af, type: 2}

@@ -4,19 +4,19 @@ using UnityEngine;
 
 public class GameField : MonoBehaviour
 {
-    [SerializeField] private GameObject cellPrefab;
+    private GameObject cellPrefab;
 
     [SerializeField] private Material material1;
     [SerializeField] private Material material2;
     
-    private bool checkerColor = true;
+    private bool checkerMaterial = true;
 
     private int fieldDimention = 8;
 
 
-    private void Start()
+    private void Awake()
     {
-        // CreateGameField();
+        cellPrefab = Resources.Load("Prefabs/Cell", typeof(GameObject)) as GameObject;
     }
     
     
@@ -32,20 +32,20 @@ public class GameField : MonoBehaviour
 
                 cell.transform.position = new Vector3(i, cell.transform.position.y, j);
                 
-                if (checkerColor)
+                if (checkerMaterial)
                 {
-                    cell.GetComponent<MeshRenderer>().material = material1;
+                    cell.GetComponent<Cell>().SetColor(Color.grey);
                 }
                 else
                 {
-                    cell.GetComponent<MeshRenderer>().material = material2;
+                    cell.GetComponent<Cell>().SetColor(Color.black);
                 }
 
-                checkerColor = !checkerColor;
+                checkerMaterial = !checkerMaterial;
                 
                 cell.GetComponent<Cell>().Coordinates = new Vector2(i, j);
             }
-            checkerColor = !checkerColor;
+            checkerMaterial = !checkerMaterial;
         }
     }
 }
