@@ -13,7 +13,7 @@ public class Figure : MonoBehaviour
     private Manager manager;
 
 
-    [SerializeField] public Vector2 Position { get; set; }
+    [SerializeField] public Vector2 Coordinates { get; set; }
     [SerializeField] private float currentY;
 
     private MeshRenderer meshRenderer;
@@ -29,7 +29,7 @@ public class Figure : MonoBehaviour
         manager = Manager.Instance;
 
 
-        UpdatePosition();
+        UpdateCoordinates();
     }
 
 
@@ -37,9 +37,9 @@ public class Figure : MonoBehaviour
 
     private void OnMouseDown()
     {
+        UpdateCoordinates();
         dragOffset = transform.position - GetMousePosition();
         manager.CurrentFigure = this;
-        UpdatePosition();
     }
 
     private void OnMouseDrag()
@@ -47,7 +47,12 @@ public class Figure : MonoBehaviour
         var mousePosition = GetMousePosition();
         mousePosition.y += 1;
         transform.position = Vector3.MoveTowards(
-            transform.position, mousePosition + dragOffset, 10 * Time.deltaTime);
+            transform.position, mousePosition + dragOffset, 20 * Time.deltaTime);
+    }
+
+    private void OnMouseUp()
+    {
+        transform.position = GetPositionFromCoordinates();
     }
 
 
@@ -58,11 +63,15 @@ public class Figure : MonoBehaviour
         return mousePosition;
     }
 
-
-    private void UpdatePosition()
+    private Vector3 GetPositionFromCoordinates()
     {
-        Position = new Vector2(gameObject.transform.position.x, gameObject.transform.position.z);
-        Debug.Log("Position is Update");
+        return new Vector3(Coordinates.x, currentY, Coordinates.y);
+    }
+
+    private void UpdateCoordinates()
+    {
+        Coordinates = new Vector2(gameObject.transform.position.x, gameObject.transform.position.z);
+        Debug.Log($"Position is Update {Coordinates}");
     }
 
     public void SetFigureColor(FigureColor figureColor)
