@@ -6,21 +6,16 @@ using UnityEngine.SceneManagement;
 
 public class Manager : MonoBehaviour
 {
+    #region ForRefactor
+    
     public delegate void ChangeCurrentFigure();
     public event ChangeCurrentFigure OnCurrentFigureChanged;
     
-    private GameField _gameField;
+    private GameField gameField;
 
     private GameObject figurePrefab;
     
     public static Manager Instance;
-    public enum State
-    {
-        MovePlayerOne,
-        MovePlayerTwo,
-    }
-
-    [HideInInspector] public State CurrentState = State.MovePlayerOne;
 
     private Figure _currentFigure;
     [HideInInspector] public Figure CurrentFigure
@@ -35,18 +30,13 @@ public class Manager : MonoBehaviour
     
     private void Awake() {
         Instance = this;
-        _gameField = GetComponent<GameField>();
+        gameField = GetComponent<GameField>();
         figurePrefab = Resources.Load("Prefabs/Figure", typeof(GameObject)) as GameObject;
-    }
-
-    private void Start()
-    {
-        SetupGame();
     }
 
     private void SetupGame()
     {
-        _gameField.CreateGameField();
+        gameField.CreateGameField();
         SetupFigures();
     }
 
@@ -64,20 +54,83 @@ public class Manager : MonoBehaviour
 
     public void SetupFigures()
     {
-        Vector3 coordinate_1 = new Vector3(7, figurePrefab.transform.position.y, 0);
-        Vector3 coordinate_2 = new Vector3(0, figurePrefab.transform.position.y, 7);
+        Vector3 coordinate1 = new Vector3(7, figurePrefab.transform.position.y, 0);
+        Vector3 coordinate2 = new Vector3(0, figurePrefab.transform.position.y, 7);
         
-        var Figure1 = Instantiate(figurePrefab, coordinate_1, Quaternion.identity);
-        var Figure2 = Instantiate(figurePrefab, coordinate_2, Quaternion.identity);
+        var Figure1 = Instantiate(figurePrefab, coordinate1, Quaternion.identity);
+        var Figure2 = Instantiate(figurePrefab, coordinate2, Quaternion.identity);
         
         Figure2.GetComponent<Figure>().SetMaterial();
     }
     
     
+    #endregion
+
     
-    
-    
-    public void LoadGame() {
-        SceneManager.LoadScene("Game");
+    private void Start()
+    {
+        InitGameStates();
+        SetGameStateByDefault();
     }
+
+    private void Update()
+    {
+        stateCurrent?.Update();
+    }
+    
+    
+    #region State Machine
+    
+    private Dictionary<Type, IGameState> statesMap;
+    private IGameState stateCurrent;
+    
+    private void InitGameStates() {
+        statesMap = new Dictionary<Type, IGameState>();
+        
+        statesMap[typeof(GameStateStart)] = new GameStateStart();
+        statesMap[typeof(GameStatePlayerOneMove)] = new GameStatePlayerOneMove();
+        statesMap[typeof(GameStatePlayerTwoMove)] = new GameStatePlayerTwoMove();
+        statesMap[typeof(GameStateResult)] = new GameStateResult();
+    }
+
+    private void SetGameState(IGameState newState) {
+        stateCurrent?.Exit();
+
+        stateCurrent = newState;
+        stateCurrent.Enter();
+    }
+
+    private void SetGameStateByDefault()
+    {
+        SetGameStateStart();
+    }
+    
+    private IGameState GetGameState<T>() where T : IGameState
+    {
+        var type = typeof(T);
+        return statesMap[type];
+    }
+    
+    //Методы для установки состояний
+    public void SetGameStateStart() {
+        var state = GetGameState<GameStateStart>();
+        SetGameState(state);
+    }
+
+    public void SetGameStatePlayerOneMove() {
+        var state = GetGameState<GameStatePlayerOneMove>();
+        SetGameState(state);
+    }
+
+    public void SetGameStatePlayerTwoMove() {
+        var state = GetGameState<GameStatePlayerTwoMove>();
+        SetGameState(state);
+    }
+
+    public void SetGameStateResult() {
+        var state = GetGameState<GameStateResult>();
+        SetGameState(state);
+    }
+
+    #endregion
 }
