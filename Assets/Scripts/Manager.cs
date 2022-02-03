@@ -6,67 +6,41 @@ using UnityEngine.SceneManagement;
 
 public class Manager : MonoBehaviour
 {
-    #region ForRefactor
-    
-    public delegate void ChangeCurrentFigure();
-    public event ChangeCurrentFigure OnCurrentFigureChanged;
-    
-    private GameField gameField;
+    #region Base
 
-    private GameObject figurePrefab;
+    private Dictionary<Type, IGameState> statesMap;
+    private IGameState stateCurrent;
     
     public static Manager Instance;
 
-    private Figure _currentFigure;
-    [HideInInspector] public Figure CurrentFigure
-    {
-        get => _currentFigure;
-        set {
-            _currentFigure = value;
-            OnCurrentFigureChanged?.Invoke();
-        }
-    }
-    
-    
-    private void Awake() {
-        Instance = this;
-        gameField = GetComponent<GameField>();
-        figurePrefab = Resources.Load("Prefabs/Figure", typeof(GameObject)) as GameObject;
-    }
+    public Figure CurrentFigure { get; set; }
 
-    private void SetupGame()
+    public GameField GameField { get; set; }
+
+    private void Awake()
     {
-        gameField.CreateGameField();
-        SetupFigures();
+        Instance = this;
+        GameField = GetComponent<GameField>();
     }
+    
+
+    #endregion
+
+
+    #region Logic
 
     public void CheckIsMove(Vector2 coordinates)
     {
-        if (!_currentFigure) return;
-        
-        var curPos = CurrentFigure.Position;
-
-        if (Math.Abs(curPos.x - coordinates.x) <= 1 && Math.Abs(curPos.y - coordinates.y) <= 1)
-        {
-            CurrentFigure.Move(coordinates);    
-        }
     }
 
-    public void SetupFigures()
-    {
-        Vector3 coordinate1 = new Vector3(7, figurePrefab.transform.position.y, 0);
-        Vector3 coordinate2 = new Vector3(0, figurePrefab.transform.position.y, 7);
-        
-        var Figure1 = Instantiate(figurePrefab, coordinate1, Quaternion.identity);
-        var Figure2 = Instantiate(figurePrefab, coordinate2, Quaternion.identity);
-        
-        Figure2.GetComponent<Figure>().SetMaterial();
-    }
-    
-    
     #endregion
-
     
+
+
+
+
+    #region State Machine
+
     private void Start()
     {
         InitGameStates();
@@ -78,22 +52,18 @@ public class Manager : MonoBehaviour
         stateCurrent?.Update();
     }
     
-    
-    #region State Machine
-    
-    private Dictionary<Type, IGameState> statesMap;
-    private IGameState stateCurrent;
-    
-    private void InitGameStates() {
+    private void InitGameStates()
+    {
         statesMap = new Dictionary<Type, IGameState>();
-        
+
         statesMap[typeof(GameStateStart)] = new GameStateStart();
         statesMap[typeof(GameStatePlayerOneMove)] = new GameStatePlayerOneMove();
         statesMap[typeof(GameStatePlayerTwoMove)] = new GameStatePlayerTwoMove();
         statesMap[typeof(GameStateResult)] = new GameStateResult();
     }
 
-    private void SetGameState(IGameState newState) {
+    private void SetGameState(IGameState newState)
+    {
         stateCurrent?.Exit();
 
         stateCurrent = newState;
@@ -104,30 +74,34 @@ public class Manager : MonoBehaviour
     {
         SetGameStateStart();
     }
-    
+
     private IGameState GetGameState<T>() where T : IGameState
     {
         var type = typeof(T);
         return statesMap[type];
     }
-    
+
     //Методы для установки состояний
-    public void SetGameStateStart() {
+    public void SetGameStateStart()
+    {
         var state = GetGameState<GameStateStart>();
         SetGameState(state);
     }
 
-    public void SetGameStatePlayerOneMove() {
+    public void SetGameStatePlayerOneMove()
+    {
         var state = GetGameState<GameStatePlayerOneMove>();
         SetGameState(state);
     }
 
-    public void SetGameStatePlayerTwoMove() {
+    public void SetGameStatePlayerTwoMove()
+    {
         var state = GetGameState<GameStatePlayerTwoMove>();
         SetGameState(state);
     }
 
-    public void SetGameStateResult() {
+    public void SetGameStateResult()
+    {
         var state = GetGameState<GameStateResult>();
         SetGameState(state);
     }

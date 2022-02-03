@@ -2,55 +2,74 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum FigureColor
+{
+    Red,
+    Blue
+}
 
 public class Figure : MonoBehaviour
 {
-    private Manager _manager;
+    private Manager manager;
 
-    [SerializeField] private GameObject selector;
-    [SerializeField] private Material[] _materials;
-    
-    
+
     [SerializeField] public Vector2 Position { get; set; }
     [SerializeField] private float currentY;
-    
+
+    private MeshRenderer meshRenderer;
+
+    private void Awake()
+    {
+        meshRenderer = GetComponent<MeshRenderer>();
+    }
+
     private void Start()
     {
         currentY = gameObject.transform.position.y;
-        _manager = Manager.Instance;
-        
-        _manager.OnCurrentFigureChanged += HideSelector;
+        manager = Manager.Instance;
+
+
         UpdatePosition();
     }
 
-    private void Update()
+
+    private Vector3 dragOffset;
+
+    private void OnMouseDown()
     {
-        
-    }
-
-    public void Move(Vector2 target) {
-        transform.position = new Vector3(target.x, currentY, target.y);
+        dragOffset = transform.position - GetMousePosition();
+        manager.CurrentFigure = this;
         UpdatePosition();
     }
 
-    private void OnMouseDown() {
-        _manager.CurrentFigure = this;
-        selector.gameObject.SetActive(true);
+    private void OnMouseDrag()
+    {
+        var mousePosition = GetMousePosition();
+        mousePosition.y += 1;
+        transform.position = Vector3.MoveTowards(
+            transform.position, mousePosition + dragOffset, 10 * Time.deltaTime);
     }
-    
-    private void HideSelector() {
-        if (_manager.CurrentFigure != this) {
-            selector.gameObject.SetActive(false);
-        }
+
+
+    Vector3 GetMousePosition()
+    {
+        var mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        mousePosition.y = currentY;
+        return mousePosition;
     }
+
 
     private void UpdatePosition()
     {
         Position = new Vector2(gameObject.transform.position.x, gameObject.transform.position.z);
+        Debug.Log("Position is Update");
     }
 
-    public void SetMaterial()
+    public void SetFigureColor(FigureColor figureColor)
     {
-        gameObject.GetComponent<MeshRenderer>().material = _materials[1];
+        if (figureColor == FigureColor.Blue)
+            meshRenderer.material.SetColor("_Color", Color.blue);
+        if (figureColor == FigureColor.Red)
+            meshRenderer.material.SetColor("_Color", Color.red);
     }
 }

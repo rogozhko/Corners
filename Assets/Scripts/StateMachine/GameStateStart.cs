@@ -2,9 +2,14 @@ using UnityEngine;
 
 public class GameStateStart: IGameState
 {
+    private Manager manager = Manager.Instance;
+
     public void Enter()
     {
-        Debug.Log("Enter Start State");
+        manager.GameField.CreateGameField();
+        manager.GameField.CreateFigures();
+        
+        manager.SetGameStatePlayerOneMove();
     }
 
     public void Exit()
