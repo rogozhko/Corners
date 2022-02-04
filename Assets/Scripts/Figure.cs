@@ -27,59 +27,58 @@ public class Figure : MonoBehaviour
     }
 
 
+    private Vector3 currentPos;
+
     private void OnMouseDown()
     {
-        if (manager.CurrentPlayer == PlayerType)
-        {
-            dragOffset = transform.position - GetMousePosition();
-            PullFromArray();
-        }
+        if (manager.CurrentPlayer != PlayerType) return;
+        dragOffset = transform.position - Utils.GetMousePosition();
+        currentPos = transform.position;
     }
 
     private void OnMouseDrag()
     {
-        if (manager.CurrentPlayer == PlayerType)
-        {
-            var mousePosition = GetMousePosition();
-            mousePosition.y += 1;
-            transform.position = Vector3.MoveTowards(
-                transform.position, mousePosition + dragOffset, 20 * Time.deltaTime);
-        }
+        if (manager.CurrentPlayer != PlayerType) return;
+        var mousePosition = Utils.GetMousePosition();
+        mousePosition.y += 1;
+        
+        transform.position = Vector3.MoveTowards(
+            transform.position, mousePosition + dragOffset, 20 * Time.deltaTime);
     }
 
     private void OnMouseUp()
     {
-        if (manager.CurrentPlayer == PlayerType)
+        if (manager.CurrentPlayer != PlayerType) return;
+        
+        if (!Utils.CheckIsOutOfFieldEdge() && !CheckIsAvaible())
         {
-            // Написать проверку на наличие фигуры в координатах
-
-            SetFigureToMouseRound();
-
-
+            SnapFigure();
+            PullFromArray();
             UpdateCoordinates();
             PutInArray();
-            
-            ShowDebug();
         }
+        else
+        {
+            transform.position = currentPos;
+        }
+        
+        ShowDebug();
     }
 
+    // Написать метод возвращающий координаты и если в пределах поля
 
-    private Vector3 GetMousePosition()
+
+    
+    private bool CheckIsAvaible()
     {
-        // Написать метод возвращающий координаты и если в пределах поля
-
-        var mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        return mousePosition;
+        var mousePosition = Utils.GetRoundMousePosition();
+        return Arrays.CheckIsContain(mousePosition.Item1, mousePosition.Item2);
     }
 
-    private void SetFigureToMouseRound()
+    private void SnapFigure()
     {
-        var a = GetMousePosition();
-        var x = Mathf.RoundToInt(a.x);
-        var y = Mathf.RoundToInt(a.z);
-
-        var position = Utils.GetVector3FromCoordinates(x, y);
-        position.y = currentY;
+        var mousePosition = Utils.GetRoundMousePosition();
+        var position = new Vector3(mousePosition.Item1, currentY, mousePosition.Item2);
         transform.position = position;
     }
 
@@ -127,12 +126,7 @@ public class Figure : MonoBehaviour
     {
         Debug.Log($"{gameObject.name} : Coordinates: {Coordinates}," +
                   $" Player: {PlayerType}, In Arrays.figures: {Arrays.CoordinatesOf(Arrays.figures, this)}");
-        
     }
 
     #endregion
-    
-    
-    
-    
 }

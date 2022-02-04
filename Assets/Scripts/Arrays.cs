@@ -7,8 +7,7 @@ public class Arrays
 {
     public static bool CheckIsContain(int a, int b)
     {
-        return figures[a, b].name != null;
-        
+        return figures[a, b] != null;
     }
 
 

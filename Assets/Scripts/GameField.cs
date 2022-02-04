@@ -81,9 +81,6 @@ public class GameField : MonoBehaviour
 
         figure.SetPlayerType(playerType);
         figure.UpdateCoordinates(coordinates);
-        //
-        // figure.GetComponent<Figure>().SetPlayerType(playerType);
-        // figure.GetComponent<Figure>().UpdateCoordinates(coordinates);
 
         figureGO.name = "Figure" + figureCount;
         figureCount++;
