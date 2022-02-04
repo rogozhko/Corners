@@ -10,6 +10,16 @@ public class GameStateStart: IGameState
         manager.GameField.CreateFigures();
 
         
+        // foreach (var f in Arrays.figures)
+        // {
+        //     if (f != null)
+        //     {
+        //         f.ShowDebug();
+        //     }
+        // }
+
+        Debug.Log(Arrays.CheckIsContain(5, 0));
+        
         
         manager.SetGameStatePlayerOneMove();
     }

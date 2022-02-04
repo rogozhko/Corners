@@ -20,6 +20,8 @@ public class Manager : MonoBehaviour
     public static Manager Instance;
 
     private Figure currentFigure;
+    [SerializeField] private Player _currentPlayer;
+
     public Figure CurrentFigure
     {
         get => currentFigure;
@@ -32,8 +34,13 @@ public class Manager : MonoBehaviour
 
     public GameField GameField { get; set; }
 
-    public Player CurrentPlayer { get; set; }
-    
+
+    public Player CurrentPlayer
+    {
+        get => _currentPlayer;
+        set => _currentPlayer = value;
+    }
+
     private void Awake()
     {
         Instance = this;
@@ -45,12 +52,9 @@ public class Manager : MonoBehaviour
 
     #region Logic
 
-    
+    public Arrays arrays;
 
     #endregion
-
-
-    #region State Machine
 
     private void Start()
     {
@@ -62,6 +66,8 @@ public class Manager : MonoBehaviour
     {
         currentState?.Update();
     }
+
+    #region State Machine
 
     private void InitGameStates()
     {
@@ -91,7 +97,7 @@ public class Manager : MonoBehaviour
         var type = typeof(T);
         return statesMap[type];
     }
-    
+
     public void SetGameStateStart()
     {
         var state = GetGameState<GameStateStart>();

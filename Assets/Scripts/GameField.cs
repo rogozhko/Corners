@@ -9,7 +9,6 @@ public class GameField : MonoBehaviour
     private bool checkerColor = true;
     private int fieldDimention = 8;
 
-    [SerializeField] private List<Figure> figures;
     private GameObject figurePrefab;
 
     private int figureCount;
@@ -52,50 +51,47 @@ public class GameField : MonoBehaviour
     }
 
 
-    private Vector2[] playerOneFigurePositions = new[]
-    {
-        new Vector2(5, 0), new Vector2(6, 0), new Vector2(7, 0),
-        new Vector2(5, 1), new Vector2(6, 1), new Vector2(7, 1),
-        new Vector2(5, 2), new Vector2(6, 2), new Vector2(7, 2),
-    };
-    
-    private Vector2[] playerTwoFigurePositions = new[]
-    {
-        new Vector2(0, 5), new Vector2(0, 6), new Vector2(0, 7),
-        new Vector2(1, 5), new Vector2(1, 6), new Vector2(1, 7),
-        new Vector2(2, 5), new Vector2(2, 6), new Vector2(2, 7),
-    };
-    
     public void CreateFigures()
     {
         GameObject figures = new GameObject("Figures");
 
-        foreach (var position in playerOneFigurePositions)
+        foreach (var t in Arrays.playerOneFigureCoordinates)
         {
-            var figure = CreateOneFigure(position, Player.One);
+            var figure = CreateOneFigure(t, Player.One);
             figure.transform.SetParent(figures.transform);
         }
-        
-        foreach (var position in playerTwoFigurePositions)
+
+        foreach (var t in Arrays.playerTwoFigureCoordinates)
         {
-            var figure = CreateOneFigure(position, Player.Two);
+            var figure = CreateOneFigure(t, Player.Two);
             figure.transform.SetParent(figures.transform);
         }
     }
 
-    private GameObject CreateOneFigure(Vector2 coordinates, Player playerType)
+
+    private GameObject CreateOneFigure(Tuple<int, int> coordinates, Player playerType)
     {
-        Vector3 position =
-            new Vector3(coordinates.x, figurePrefab.transform.position.y, coordinates.y);
-        GameObject figure = Instantiate(figurePrefab, position, Quaternion.identity);
-            
-        figure.GetComponent<Figure>().SetPlayerType(playerType);
+        var position = Utils.GetVector3FromCoordinates(coordinates);
 
-        figures.Add(figure.GetComponent<Figure>());
+        position.y = figurePrefab.transform.position.y;
 
-        figure.name = "Figure" + figureCount;
+        GameObject figureGO = Instantiate(figurePrefab, position, Quaternion.identity);
+
+        var figure = figureGO.GetComponent<Figure>();
+
+        figure.SetPlayerType(playerType);
+        figure.UpdateCoordinates(coordinates);
+        //
+        // figure.GetComponent<Figure>().SetPlayerType(playerType);
+        // figure.GetComponent<Figure>().UpdateCoordinates(coordinates);
+
+        figureGO.name = "Figure" + figureCount;
         figureCount++;
 
-        return figure;
+        // Сюда передать int координаты и запихнуть фигуру
+        Arrays.figures[coordinates.Item1, coordinates.Item2] = figure;
+
+
+        return figureGO;
     }
 }

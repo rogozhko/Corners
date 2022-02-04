@@ -20,18 +20,6 @@ public class Cell : MonoBehaviour
         meshRenderer = GetComponent<MeshRenderer>();
     }
 
-    // void OnMouseDown()
-    // {
-    // }
-    //
-    // void OnMouseEnter()
-    // {
-    // }
-    //
-    // void OnMouseExit()
-    // {
-    // }
-
     public void SetCellColor(CellColor cellColor)
     {
         if (cellColor == CellColor.Black)
