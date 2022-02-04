@@ -15,16 +15,6 @@ public class Cell : MonoBehaviour
     public Vector2 Coordinates { get; set; }
     private MeshRenderer meshRenderer;
 
-
-    public Cell(CellColor cellColor)
-    {
-        if (cellColor == CellColor.Black)
-            Debug.Log("Создали черную клетку");
-        if (cellColor == CellColor.White)
-            Debug.Log("Создали белую клетку");
-    }
-
-
     private void Awake()
     {
         meshRenderer = GetComponent<MeshRenderer>();

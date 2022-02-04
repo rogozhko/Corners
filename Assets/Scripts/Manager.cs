@@ -26,7 +26,7 @@ public class Manager : MonoBehaviour
         set
         {
             currentFigure = value;
-            Debug.Log($"Current Figure {CurrentFigure}");
+            // Debug.Log($"Current Figure {CurrentFigure}");
         }
     }
 
