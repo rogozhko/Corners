@@ -23,7 +23,6 @@ public class Figure : MonoBehaviour
     private void Start()
     {
         currentY = gameObject.transform.position.y;
-        // UpdateCoordinates();
     }
 
 
@@ -41,7 +40,7 @@ public class Figure : MonoBehaviour
         if (manager.CurrentPlayer != PlayerType) return;
         var mousePosition = Utils.GetMousePosition();
         mousePosition.y += 1;
-        
+
         transform.position = Vector3.MoveTowards(
             transform.position, mousePosition + dragOffset, 20 * Time.deltaTime);
     }
@@ -49,7 +48,7 @@ public class Figure : MonoBehaviour
     private void OnMouseUp()
     {
         if (manager.CurrentPlayer != PlayerType) return;
-        
+
         if (!Utils.CheckIsOutOfFieldEdge() && !CheckIsAvaible())
         {
             SnapFigure();
@@ -61,13 +60,11 @@ public class Figure : MonoBehaviour
         {
             transform.position = currentPos;
         }
-        
-        ShowDebug();
+
+        // ShowDebug();
+        Debug.Log(Arrays.CountOfCurrentPlayerFiguresInEnemyField(PlayerType));
+        if(Arrays.CheckIsWin(PlayerType)) Debug.Log($"Winner is {PlayerType}");
     }
-
-    // Написать метод возвращающий координаты и если в пределах поля
-
-
     
     private bool CheckIsAvaible()
     {
@@ -122,11 +119,11 @@ public class Figure : MonoBehaviour
     #region Debug
 
     //Debug
-    private void ShowDebug()
-    {
-        Debug.Log($"{gameObject.name} : Coordinates: {Coordinates}," +
-                  $" Player: {PlayerType}, In Arrays.figures: {Arrays.CoordinatesOf(Arrays.figures, this)}");
-    }
+    // private void ShowDebug()
+    // {
+    //     Debug.Log($"{gameObject.name} : Coordinates: {Coordinates}," +
+    //               $" Player: {PlayerType}, In Arrays.figures: {Arrays.CoordinatesOf(Arrays.figures, this)}");
+    // }
 
     #endregion
 }

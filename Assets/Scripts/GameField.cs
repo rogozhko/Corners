@@ -84,7 +84,7 @@ public class GameField : MonoBehaviour
 
         figureGO.name = "Figure" + figureCount;
         figureCount++;
-        
+
         Arrays.figures[coordinates.Item1, coordinates.Item2] = figure;
 
 
