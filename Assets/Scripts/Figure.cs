@@ -10,13 +10,15 @@ public enum FigureColor
 
 public class Figure : MonoBehaviour
 {
-    private Manager manager;
+    private Manager manager = Manager.Instance;
 
 
     [SerializeField] public Vector2 Coordinates { get; set; }
     [SerializeField] private float currentY;
 
     private MeshRenderer meshRenderer;
+
+    private Vector3 dragOffset;
 
     private void Awake()
     {
@@ -26,14 +28,9 @@ public class Figure : MonoBehaviour
     private void Start()
     {
         currentY = gameObject.transform.position.y;
-        manager = Manager.Instance;
-
-
         UpdateCoordinates();
     }
 
-
-    private Vector3 dragOffset;
 
     private void OnMouseDown()
     {
@@ -56,7 +53,7 @@ public class Figure : MonoBehaviour
     }
 
 
-    Vector3 GetMousePosition()
+    private Vector3 GetMousePosition()
     {
         var mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         mousePosition.y = currentY;
@@ -71,7 +68,6 @@ public class Figure : MonoBehaviour
     private void UpdateCoordinates()
     {
         Coordinates = new Vector2(gameObject.transform.position.x, gameObject.transform.position.z);
-        Debug.Log($"Position is Update {Coordinates}");
     }
 
     public void SetFigureColor(FigureColor figureColor)

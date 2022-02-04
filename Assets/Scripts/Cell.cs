@@ -30,17 +30,17 @@ public class Cell : MonoBehaviour
         meshRenderer = GetComponent<MeshRenderer>();
     }
 
-    void OnMouseDown()
-    {
-    }
-
-    void OnMouseEnter()
-    {
-    }
-
-    void OnMouseExit()
-    {
-    }
+    // void OnMouseDown()
+    // {
+    // }
+    //
+    // void OnMouseEnter()
+    // {
+    // }
+    //
+    // void OnMouseExit()
+    // {
+    // }
 
     public void SetCellColor(CellColor cellColor)
     {

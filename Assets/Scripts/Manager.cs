@@ -6,14 +6,23 @@ using UnityEngine.SceneManagement;
 
 public class Manager : MonoBehaviour
 {
-    #region Base
+    #region General
 
     private Dictionary<Type, IGameState> statesMap;
-    private IGameState stateCurrent;
-    
+    private IGameState currentState;
+
     public static Manager Instance;
 
-    public Figure CurrentFigure { get; set; }
+    private Figure currentFigure;
+    public Figure CurrentFigure
+    {
+        get => currentFigure;
+        set
+        {
+            currentFigure = value;
+            Debug.Log($"Current Figure {CurrentFigure}");
+        }
+    }
 
     public GameField GameField { get; set; }
 
@@ -22,21 +31,15 @@ public class Manager : MonoBehaviour
         Instance = this;
         GameField = GetComponent<GameField>();
     }
-    
 
     #endregion
 
 
     #region Logic
 
-    public void CheckIsMove(Vector2 coordinates)
-    {
-    }
-
-    #endregion
     
 
-
+    #endregion
 
 
     #region State Machine
@@ -49,9 +52,9 @@ public class Manager : MonoBehaviour
 
     private void Update()
     {
-        stateCurrent?.Update();
+        currentState?.Update();
     }
-    
+
     private void InitGameStates()
     {
         statesMap = new Dictionary<Type, IGameState>();
@@ -64,10 +67,10 @@ public class Manager : MonoBehaviour
 
     private void SetGameState(IGameState newState)
     {
-        stateCurrent?.Exit();
+        currentState?.Exit();
 
-        stateCurrent = newState;
-        stateCurrent.Enter();
+        currentState = newState;
+        currentState.Enter();
     }
 
     private void SetGameStateByDefault()
@@ -80,8 +83,7 @@ public class Manager : MonoBehaviour
         var type = typeof(T);
         return statesMap[type];
     }
-
-    //Методы для установки состояний
+    
     public void SetGameStateStart()
     {
         var state = GetGameState<GameStateStart>();
