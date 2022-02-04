@@ -52,7 +52,7 @@ public class Manager : MonoBehaviour
 
     #region Logic
 
-    public Arrays arrays;
+
 
     #endregion
 

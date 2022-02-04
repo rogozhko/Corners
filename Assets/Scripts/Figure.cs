@@ -8,7 +8,7 @@ public class Figure : MonoBehaviour
     private Manager manager = Manager.Instance;
 
     public Player PlayerType { get; set; }
-    public Tuple<int,int> Coordinates { get; set; }
+    public Tuple<int, int> Coordinates { get; set; }
     private float currentY;
 
     private MeshRenderer meshRenderer;
@@ -32,6 +32,7 @@ public class Figure : MonoBehaviour
         if (manager.CurrentPlayer == PlayerType)
         {
             dragOffset = transform.position - GetMousePosition();
+            PullFromArray();
         }
     }
 
@@ -50,20 +51,14 @@ public class Figure : MonoBehaviour
     {
         if (manager.CurrentPlayer == PlayerType)
         {
-            var a = GetMousePosition();
-            var x = Mathf.RoundToInt(a.x);
-            var y = Mathf.RoundToInt(a.z);
-     
-            // Написать метод возвращающий координаты и если в пределах поля
-        
-            // Debug.Log($"{Mathf.RoundToInt(a.x)},{Mathf.RoundToInt(a.z)}");
+            // Написать проверку на наличие фигуры в координатах
 
-            transform.position = GetPositionFromCoordinates(x,y);
+            SetFigureToMouseRound();
 
-            // transform.position = GetPositionFromCoordinates();
-        
-        
+
             UpdateCoordinates();
+            PutInArray();
+            
             ShowDebug();
         }
     }
@@ -71,24 +66,31 @@ public class Figure : MonoBehaviour
 
     private Vector3 GetMousePosition()
     {
+        // Написать метод возвращающий координаты и если в пределах поля
+
         var mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        mousePosition.y = currentY;
         return mousePosition;
     }
-    
 
-    private Vector3 GetPositionFromCoordinates(int x, int y)
+    private void SetFigureToMouseRound()
     {
-        return new Vector3(x, currentY, y);
+        var a = GetMousePosition();
+        var x = Mathf.RoundToInt(a.x);
+        var y = Mathf.RoundToInt(a.z);
+
+        var position = Utils.GetVector3FromCoordinates(x, y);
+        position.y = currentY;
+        transform.position = position;
     }
 
     private void UpdateCoordinates()
     {
         var a = transform.position.x;
         var b = transform.position.z;
-        Coordinates = new Tuple<int, int>(Mathf.RoundToInt(a),Mathf.RoundToInt(b));
+        Coordinates = new Tuple<int, int>(Mathf.RoundToInt(a), Mathf.RoundToInt(b));
     }
-    public void UpdateCoordinates(Tuple<int,int> coordinates)
+
+    public void UpdateCoordinates(Tuple<int, int> coordinates)
     {
         Coordinates = coordinates;
     }
@@ -106,15 +108,31 @@ public class Figure : MonoBehaviour
         if (playerType == Player.Two)
             meshRenderer.material.SetColor("_Color", Color.red);
     }
-    
-    //Debug
-    public void AliveMessage()
+
+
+    private void PullFromArray()
     {
-        Debug.Log($"{gameObject.name} Alive!");
+        Arrays.figures[Coordinates.Item1, Coordinates.Item2] = null;
     }
 
-    public void ShowDebug()
+    private void PutInArray()
     {
-        Debug.Log($"{gameObject.name} : {Coordinates}, {PlayerType}");
+        Arrays.figures[Coordinates.Item1, Coordinates.Item2] = this;
     }
+
+    #region Debug
+
+    //Debug
+    private void ShowDebug()
+    {
+        Debug.Log($"{gameObject.name} : Coordinates: {Coordinates}," +
+                  $" Player: {PlayerType}, In Arrays.figures: {Arrays.CoordinatesOf(Arrays.figures, this)}");
+        
+    }
+
+    #endregion
+    
+    
+    
+    
 }

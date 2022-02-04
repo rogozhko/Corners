@@ -87,8 +87,7 @@ public class GameField : MonoBehaviour
 
         figureGO.name = "Figure" + figureCount;
         figureCount++;
-
-        // Сюда передать int координаты и запихнуть фигуру
+        
         Arrays.figures[coordinates.Item1, coordinates.Item2] = figure;
 
 
