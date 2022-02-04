@@ -8,6 +8,8 @@ public class GameStateStart: IGameState
     {
         manager.GameField.CreateGameField();
         manager.GameField.CreateFigures();
+
+        
         
         manager.SetGameStatePlayerOneMove();
     }
@@ -20,4 +22,6 @@ public class GameStateStart: IGameState
     {
         
     }
+    
+    
 }

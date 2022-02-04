@@ -4,6 +4,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+public enum Player
+{
+    One,
+    Two
+}
+
 public class Manager : MonoBehaviour
 {
     #region General
@@ -26,6 +32,8 @@ public class Manager : MonoBehaviour
 
     public GameField GameField { get; set; }
 
+    public Player CurrentPlayer { get; set; }
+    
     private void Awake()
     {
         Instance = this;

@@ -2,17 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum FigureColor
-{
-    Red,
-    Blue
-}
-
 public class Figure : MonoBehaviour
 {
     private Manager manager = Manager.Instance;
 
-
+    [SerializeField] private Player playerType;
+    
     [SerializeField] public Vector2 Coordinates { get; set; }
     [SerializeField] private float currentY;
 
@@ -70,11 +65,17 @@ public class Figure : MonoBehaviour
         Coordinates = new Vector2(gameObject.transform.position.x, gameObject.transform.position.z);
     }
 
-    public void SetFigureColor(FigureColor figureColor)
+    public void SetPlayerType(Player playerType)
     {
-        if (figureColor == FigureColor.Blue)
+        this.playerType = playerType;
+        SetFigureColor(playerType);
+    }
+    
+    private void SetFigureColor(Player playerType)
+    {
+        if (playerType == Player.One)
             meshRenderer.material.SetColor("_Color", Color.blue);
-        if (figureColor == FigureColor.Red)
+        if (playerType == Player.Two)
             meshRenderer.material.SetColor("_Color", Color.red);
     }
 }

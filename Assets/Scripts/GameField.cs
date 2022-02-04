@@ -72,24 +72,24 @@ public class GameField : MonoBehaviour
 
         foreach (var position in playerOneFigurePositions)
         {
-            var figure = CreateOneFigure(position, FigureColor.Blue);
+            var figure = CreateOneFigure(position, Player.One);
             figure.transform.SetParent(figures.transform);
         }
         
         foreach (var position in playerTwoFigurePositions)
         {
-            var figure = CreateOneFigure(position, FigureColor.Red);
+            var figure = CreateOneFigure(position, Player.Two);
             figure.transform.SetParent(figures.transform);
         }
     }
 
-    private GameObject CreateOneFigure(Vector2 coordinates, FigureColor figureColor)
+    private GameObject CreateOneFigure(Vector2 coordinates, Player playerType)
     {
         Vector3 position =
             new Vector3(coordinates.x, figurePrefab.transform.position.y, coordinates.y);
         GameObject figure = Instantiate(figurePrefab, position, Quaternion.identity);
-
-        figure.GetComponent<Figure>().SetFigureColor(figureColor);
+            
+        figure.GetComponent<Figure>().SetPlayerType(playerType);
 
         figures.Add(figure.GetComponent<Figure>());
 
