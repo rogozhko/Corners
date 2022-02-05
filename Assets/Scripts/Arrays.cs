@@ -11,6 +11,8 @@ public class Arrays
     public static Figure[,] figures = new Figure[8,8];
 
 
+    #region StartPlayersPosition
+
     public static Tuple<int, int>[] playerOneFigureCoordinates = new Tuple<int, int>[]
     {
         new Tuple<int, int>(5,0), new Tuple<int, int>(6,0), new Tuple<int, int>(7,0),
@@ -25,14 +27,15 @@ public class Arrays
         new Tuple<int, int>(2,5), new Tuple<int, int>(2,6), new Tuple<int, int>(2,7)
     };
 
+    #endregion
 
-    public static bool CheckIsAvaible()
+
+    public static bool CheckIsCoordinatesAvaible()
     {
         var mousePosition = Utils.GetRoundMousePosition();
         return figures[mousePosition.Item1, mousePosition.Item2] != null;
     }
-
-
+    
     public static bool CheckIsWin(Player player)
     {
         return CountOfCurrentPlayerFiguresInEnemyField(player) == 9;
@@ -71,11 +74,8 @@ public class Arrays
                 }
             }
         }
-        
-
         return count;
     }
-    
     
     public static Tuple<int, int> CoordinatesOf<T>(T[,] matrix, T value)
     {

@@ -5,17 +5,6 @@ using UnityEngine;
 
 public static class Utils
 {
-    public static Vector3 GetVector3FromCoordinates(int a, int b)
-    {
-        return new Vector3(a, 0, b);
-    }
-
-    public static Vector3 GetVector3FromCoordinates(Tuple<int, int> coordinates)
-    {
-        return new Vector3(coordinates.Item1, 0, coordinates.Item2);
-    }
-
-
     public static Vector3 GetMousePosition()
     {
         return Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -39,5 +28,17 @@ public static class Utils
             return true;
         
         return false;
+    }
+
+
+    public static Vector3 GetPositionFromCoordinates(Tuple<int, int> coordinates)
+    {
+        return new Vector3(coordinates.Item1, 0, coordinates.Item2);
+    }
+
+    public static Tuple<int, int> GetCoordinatesFromPosition(Vector3 position)
+    {
+        Tuple<int, int> t = new Tuple<int, int>((int)position.x, (int)position.z);
+        return t;
     }
 }

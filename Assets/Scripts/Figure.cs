@@ -8,7 +8,21 @@ public class Figure : MonoBehaviour
     private Manager manager = Manager.Instance;
 
     public Player PlayerType { get; set; }
-    public Tuple<int, int> Coordinates { get; set; }
+
+    private Tuple<int, int> coordinates;
+
+    public Tuple<int, int> Coordinates
+    {
+        get
+        {
+            return coordinates;
+        }
+        set
+        {
+            coordinates = value;
+            Arrays.figures[coordinates.Item1, coordinates.Item2] = this;
+        }
+    }
 
     private MeshRenderer meshRenderer;
 
@@ -47,15 +61,19 @@ public class Figure : MonoBehaviour
 
     private void OnMouseUp()
     {
+        //Если не этот игрок - выходим
         if (manager.CurrentPlayer != PlayerType) return;
 
-        if (!Utils.CheckIsOutOfFieldEdge() && !Arrays.CheckIsAvaible())
+        // Если за полем и несводона клетка и расстояние не больше 1 клетки
+        if (!Utils.CheckIsOutOfFieldEdge() && !Arrays.CheckIsCoordinatesAvaible() && CheckIsMoreThanAvailableMove())
         {
+            RemoveFromArray();
             SnapFigure();
-            PullFromArray();
-            UpdateCoordinates();
-            PutInArray();
+
+            DebugCoordinatesPlayerTypeAndCoordinatesInArray();
+            // DebugCountInOppociteCornerAndIsWin();
         }
+        
         else
         {
             transform.position = currentPos;
@@ -64,23 +82,44 @@ public class Figure : MonoBehaviour
 
     #endregion
     
-    #region SetupAndMove
+
+    private int cellToMoveAvailable = 2;
+    
+    private bool CheckIsMoreThanAvailableMove()
+    {
+        var current = Utils.GetCoordinatesFromPosition(currentPos);
+        var mouse = Utils.GetRoundMousePosition();
+
+        if (Mathf.Abs(mouse.Item1 - current.Item1) > cellToMoveAvailable) return false;
+        if (Mathf.Abs(mouse.Item2 - current.Item2) > cellToMoveAvailable) return false;
+        
+        return true;
+    }
+    
+    
+    
+    
+    #region Move
+
+    private void RemoveFromArray()
+    {
+        Arrays.figures[coordinates.Item1, coordinates.Item2] = null;
+    }
 
     private void SnapFigure()
     {
         var mousePosition = Utils.GetRoundMousePosition();
-        var position = new Vector3(mousePosition.Item1, currentPos.y, mousePosition.Item2);
+        var position = Utils.GetPositionFromCoordinates(mousePosition);
+        position.y = currentPos.y;
         transform.position = position;
+        Coordinates = mousePosition;
     }
 
-    private void UpdateCoordinates()
-    {
-        var a = transform.position.x;
-        var b = transform.position.z;
-        Coordinates = new Tuple<int, int>(Mathf.RoundToInt(a), Mathf.RoundToInt(b));
-    }
+    #endregion
 
-    public void UpdateCoordinates(Tuple<int, int> coordinates)
+    #region Setup
+
+    public void SetupCoordinates(Tuple<int, int> coordinates)
     {
         Coordinates = coordinates;
     }
@@ -97,17 +136,6 @@ public class Figure : MonoBehaviour
             meshRenderer.material.SetColor("_Color", Color.blue);
         if (playerType == Player.Two)
             meshRenderer.material.SetColor("_Color", Color.red);
-    }
-
-
-    private void PullFromArray()
-    {
-        Arrays.figures[Coordinates.Item1, Coordinates.Item2] = null;
-    }
-
-    private void PutInArray()
-    {
-        Arrays.figures[Coordinates.Item1, Coordinates.Item2] = this;
     }
 
     #endregion

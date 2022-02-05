@@ -19,18 +19,18 @@ public class Manager : MonoBehaviour
 
     public static Manager Instance;
 
-    private Figure currentFigure;
+    // private Figure currentFigure;
     [SerializeField] private Player _currentPlayer;
 
-    public Figure CurrentFigure
-    {
-        get => currentFigure;
-        set
-        {
-            currentFigure = value;
-            // Debug.Log($"Current Figure {CurrentFigure}");
-        }
-    }
+    // public Figure CurrentFigure
+    // {
+    //     get => currentFigure;
+    //     set
+    //     {
+    //         currentFigure = value;
+    //         // Debug.Log($"Current Figure {CurrentFigure}");
+    //     }
+    // }
 
     public GameField GameField { get; set; }
 

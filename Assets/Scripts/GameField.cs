@@ -71,7 +71,7 @@ public class GameField : MonoBehaviour
 
     private GameObject CreateOneFigure(Tuple<int, int> coordinates, Player playerType)
     {
-        var position = Utils.GetVector3FromCoordinates(coordinates);
+        var position = Utils.GetPositionFromCoordinates(coordinates);
 
         position.y = figurePrefab.transform.position.y;
 
@@ -80,7 +80,7 @@ public class GameField : MonoBehaviour
         var figure = figureGO.GetComponent<Figure>();
 
         figure.SetPlayerType(playerType);
-        figure.UpdateCoordinates(coordinates);
+        figure.SetupCoordinates(coordinates);
 
         figureGO.name = "Figure" + figureCount;
         figureCount++;
