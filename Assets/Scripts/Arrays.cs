@@ -75,6 +75,8 @@ public class Arrays
     }
 
 
+    #region Matrix
+
     public static Tuple<int, int>[,] GetMatrixAroundFigure(Tuple<int, int> coordinates)
     {
         Tuple<int, int>[,] matrixAround = new Tuple<int, int>[3, 3];
@@ -89,7 +91,21 @@ public class Arrays
         
         return matrixAround;
     }
+    
+    public static Tuple<int, int>[,] GetDoubleMatrixAroundFigure(Tuple<int, int> coordinates)
+    {
+        Tuple<int, int>[,] matrixAround = new Tuple<int, int>[5, 5];
 
+        for (int i = 0; i < matrixAround.GetLength(0); i++)
+        {
+            for (int j = 0; j < matrixAround.GetLength(1); j++)
+            {
+                matrixAround[i, j] = new Tuple<int, int>(coordinates.Item1 + i - 2, coordinates.Item2 + j - 2);
+            }
+        }
+        
+        return matrixAround;
+    }
 
     public static bool CheckIsBelongToMatrix(Tuple<int, int> coordinates, Tuple<int, int>[,] matrix)
     {
@@ -100,6 +116,8 @@ public class Arrays
 
         return false;
     }
+
+    #endregion
 
 
     public static Tuple<int, int> CoordinatesOf<T>(T[,] matrix, T value)

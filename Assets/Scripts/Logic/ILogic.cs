@@ -5,6 +5,5 @@ using System;
 
 public interface ILogic
 {
-    bool CheckIsOneCellAround();
-    (bool, Tuple<int,int>) CheckIsNextOfEnemyFigure();
+    void Run(Figure figure);
 }

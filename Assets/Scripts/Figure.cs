@@ -63,49 +63,11 @@ public class Figure : MonoBehaviour
         //Если не этот игрок - выходим
         if (manager.CurrentPlayer != PlayerType) return;
 
-
-        // Если за полем и несводона клетка
-        if (!Utils.CheckIsOutOfFieldEdge() && !Arrays.CheckIsOtherFigure())
-        {
-            // Смотрим сменяемую логику
-            if (manager.CurrentLogic.CheckIsOneCellAround())
-            {
-                RemoveFromArray();
-
-                SnapFigure();
-            }
-            else
-            {
-                transform.position = currentPos;
-            }
-        }
-
-        else
-        {
-            transform.position = currentPos;
-        }
+        manager.CurrentLogic.Run(this);
     }
 
     #endregion
 
-
-    #region Move
-
-    private void RemoveFromArray()
-    {
-        Arrays.figures[coordinates.Item1, coordinates.Item2] = null;
-    }
-
-    private void SnapFigure()
-    {
-        var mousePosition = Utils.GetRoundMousePosition();
-        var position = Utils.GetPositionFromCoordinates(mousePosition);
-        position.y = currentPos.y;
-        transform.position = position;
-        Coordinates = mousePosition;
-    }
-
-    #endregion
 
     #region Setup
 
@@ -121,22 +83,6 @@ public class Figure : MonoBehaviour
             meshRenderer.material.SetColor("_Color", Color.blue);
         if (playerType == Player.Two)
             meshRenderer.material.SetColor("_Color", Color.red);
-    }
-
-    #endregion
-
-    #region Debug
-
-    private void DebugCoordinatesPlayerTypeAndCoordinatesInArray()
-    {
-        Debug.Log($"{gameObject.name} : Coordinates: {Coordinates}," +
-                  $" Player: {PlayerType}, In Arrays.figures: {Arrays.CoordinatesOf(Arrays.figures, this)}");
-    }
-
-    private void DebugCountInOppociteCornerAndIsWin()
-    {
-        Debug.Log(Arrays.CountOfCurrentPlayerFiguresInEnemyField(PlayerType));
-        if (Arrays.CheckIsWin(PlayerType)) Debug.Log($"Winner is {PlayerType}");
     }
 
     #endregion

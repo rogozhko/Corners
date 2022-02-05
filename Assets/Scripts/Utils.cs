@@ -33,7 +33,7 @@ public static class Utils
 
     public static Vector3 GetPositionFromCoordinates(Tuple<int, int> coordinates)
     {
-        return new Vector3(coordinates.Item1, 0, coordinates.Item2);
+        return new Vector3(coordinates.Item1, 0.11f, coordinates.Item2);
     }
 
     public static Tuple<int, int> GetCoordinatesFromPosition(Vector3 position)

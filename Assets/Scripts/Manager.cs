@@ -56,7 +56,7 @@ public class Manager : MonoBehaviour
     {
         InitGameStates();
         SetGameStateByDefault();
-        CurrentLogic = new Logic3();
+        CurrentLogic = new Logic2();
     }
 
     private void Update()
