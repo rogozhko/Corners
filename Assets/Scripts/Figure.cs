@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -65,23 +63,21 @@ public class Figure : MonoBehaviour
         //Если не этот игрок - выходим
         if (manager.CurrentPlayer != PlayerType) return;
 
+
         // Если за полем и несводона клетка
         if (!Utils.CheckIsOutOfFieldEdge() && !Arrays.CheckIsOtherFigure())
         {
             // Смотрим сменяемую логику
-
-            if (manager.CurrentLogic.CheckLogic())
+            if (manager.CurrentLogic.CheckIsOneCellAround())
             {
                 RemoveFromArray();
+
                 SnapFigure();
             }
             else
             {
                 transform.position = currentPos;
             }
-            
-            // DebugCoordinatesPlayerTypeAndCoordinatesInArray();
-            // DebugCountInOppociteCornerAndIsWin();
         }
 
         else
@@ -112,11 +108,6 @@ public class Figure : MonoBehaviour
     #endregion
 
     #region Setup
-
-    public void SetupCoordinates(Tuple<int, int> coordinates)
-    {
-        Coordinates = coordinates;
-    }
 
     public void SetPlayerType(Player playerType)
     {

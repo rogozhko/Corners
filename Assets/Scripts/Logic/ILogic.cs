@@ -1,7 +1,10 @@
 
 
 
+using System;
+
 public interface ILogic
 {
-    bool CheckLogic();
+    bool CheckIsOneCellAround();
+    (bool, Tuple<int,int>) CheckIsNextOfEnemyFigure();
 }
