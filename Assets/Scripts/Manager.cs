@@ -19,27 +19,29 @@ public class Manager : MonoBehaviour
 
     public static Manager Instance;
 
-    // private Figure currentFigure;
-    [SerializeField] private Player _currentPlayer;
-
-    // public Figure CurrentFigure
-    // {
-    //     get => currentFigure;
-    //     set
-    //     {
-    //         currentFigure = value;
-    //         // Debug.Log($"Current Figure {CurrentFigure}");
-    //     }
-    // }
-
-    public GameField GameField { get; set; }
-
+    [SerializeField] private Player currentPlayer;
 
     public Player CurrentPlayer
     {
-        get => _currentPlayer;
-        set => _currentPlayer = value;
+        get => currentPlayer;
+        set => currentPlayer = value;
     }
+
+    private Figure currentFigure;
+
+    public Figure CurrentFigure
+    {
+        get => currentFigure;
+        set
+        {
+            currentFigure = value;
+        }
+    }
+
+    public GameField GameField { get; set; }
+
+    public ILogic CurrentLogic { get; set; }
+    
 
     private void Awake()
     {
@@ -48,18 +50,13 @@ public class Manager : MonoBehaviour
     }
 
     #endregion
-
-
-    #region Logic
-
-
-
-    #endregion
+    
 
     private void Start()
     {
         InitGameStates();
         SetGameStateByDefault();
+        CurrentLogic = new Logic2();
     }
 
     private void Update()

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class Figure : MonoBehaviour
 {
     private Manager manager = Manager.Instance;
@@ -13,10 +14,7 @@ public class Figure : MonoBehaviour
 
     public Tuple<int, int> Coordinates
     {
-        get
-        {
-            return coordinates;
-        }
+        get { return coordinates; }
         set
         {
             coordinates = value;
@@ -36,15 +34,18 @@ public class Figure : MonoBehaviour
     private void Start()
     {
     }
-    
+
     private Vector3 currentPos;
 
-    
+
     #region Events
 
     private void OnMouseDown()
     {
         if (manager.CurrentPlayer != PlayerType) return;
+
+        manager.CurrentFigure = this;
+
         dragOffset = transform.position - Utils.GetMousePosition();
         currentPos = transform.position;
     }
@@ -64,16 +65,25 @@ public class Figure : MonoBehaviour
         //Если не этот игрок - выходим
         if (manager.CurrentPlayer != PlayerType) return;
 
-        // Если за полем и несводона клетка и расстояние не больше 1 клетки
-        if (!Utils.CheckIsOutOfFieldEdge() && !Arrays.CheckIsCoordinatesAvaible() && CheckIsMoreThanAvailableMove())
+        // Если за полем и несводона клетка
+        if (!Utils.CheckIsOutOfFieldEdge() && !Arrays.CheckIsOtherFigure())
         {
-            RemoveFromArray();
-            SnapFigure();
+            // Смотрим сменяемую логику
 
-            DebugCoordinatesPlayerTypeAndCoordinatesInArray();
+            if (manager.CurrentLogic.CheckLogic())
+            {
+                RemoveFromArray();
+                SnapFigure();
+            }
+            else
+            {
+                transform.position = currentPos;
+            }
+            
+            // DebugCoordinatesPlayerTypeAndCoordinatesInArray();
             // DebugCountInOppociteCornerAndIsWin();
         }
-        
+
         else
         {
             transform.position = currentPos;
@@ -81,24 +91,8 @@ public class Figure : MonoBehaviour
     }
 
     #endregion
-    
 
-    private int cellToMoveAvailable = 2;
-    
-    private bool CheckIsMoreThanAvailableMove()
-    {
-        var current = Utils.GetCoordinatesFromPosition(currentPos);
-        var mouse = Utils.GetRoundMousePosition();
 
-        if (Mathf.Abs(mouse.Item1 - current.Item1) > cellToMoveAvailable) return false;
-        if (Mathf.Abs(mouse.Item2 - current.Item2) > cellToMoveAvailable) return false;
-        
-        return true;
-    }
-    
-    
-    
-    
     #region Move
 
     private void RemoveFromArray()
@@ -141,17 +135,17 @@ public class Figure : MonoBehaviour
     #endregion
 
     #region Debug
-    
-     private void DebugCoordinatesPlayerTypeAndCoordinatesInArray()
-     {
-         Debug.Log($"{gameObject.name} : Coordinates: {Coordinates}," +
-                   $" Player: {PlayerType}, In Arrays.figures: {Arrays.CoordinatesOf(Arrays.figures, this)}");
-     }
+
+    private void DebugCoordinatesPlayerTypeAndCoordinatesInArray()
+    {
+        Debug.Log($"{gameObject.name} : Coordinates: {Coordinates}," +
+                  $" Player: {PlayerType}, In Arrays.figures: {Arrays.CoordinatesOf(Arrays.figures, this)}");
+    }
 
     private void DebugCountInOppociteCornerAndIsWin()
     {
         Debug.Log(Arrays.CountOfCurrentPlayerFiguresInEnemyField(PlayerType));
-        if(Arrays.CheckIsWin(PlayerType)) Debug.Log($"Winner is {PlayerType}");
+        if (Arrays.CheckIsWin(PlayerType)) Debug.Log($"Winner is {PlayerType}");
     }
 
     #endregion
