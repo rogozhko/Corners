@@ -9,7 +9,6 @@ public class Figure : MonoBehaviour
 
     public Player PlayerType { get; set; }
     public Tuple<int, int> Coordinates { get; set; }
-    private float currentY;
 
     private MeshRenderer meshRenderer;
 
@@ -22,11 +21,12 @@ public class Figure : MonoBehaviour
 
     private void Start()
     {
-        currentY = gameObject.transform.position.y;
     }
-
-
+    
     private Vector3 currentPos;
+
+    
+    #region Events
 
     private void OnMouseDown()
     {
@@ -49,7 +49,7 @@ public class Figure : MonoBehaviour
     {
         if (manager.CurrentPlayer != PlayerType) return;
 
-        if (!Utils.CheckIsOutOfFieldEdge() && !CheckIsAvaible())
+        if (!Utils.CheckIsOutOfFieldEdge() && !Arrays.CheckIsAvaible())
         {
             SnapFigure();
             PullFromArray();
@@ -60,22 +60,16 @@ public class Figure : MonoBehaviour
         {
             transform.position = currentPos;
         }
+    }
 
-        // ShowDebug();
-        Debug.Log(Arrays.CountOfCurrentPlayerFiguresInEnemyField(PlayerType));
-        if(Arrays.CheckIsWin(PlayerType)) Debug.Log($"Winner is {PlayerType}");
-    }
+    #endregion
     
-    private bool CheckIsAvaible()
-    {
-        var mousePosition = Utils.GetRoundMousePosition();
-        return Arrays.CheckIsContain(mousePosition.Item1, mousePosition.Item2);
-    }
+    #region SetupAndMove
 
     private void SnapFigure()
     {
         var mousePosition = Utils.GetRoundMousePosition();
-        var position = new Vector3(mousePosition.Item1, currentY, mousePosition.Item2);
+        var position = new Vector3(mousePosition.Item1, currentPos.y, mousePosition.Item2);
         transform.position = position;
     }
 
@@ -116,14 +110,21 @@ public class Figure : MonoBehaviour
         Arrays.figures[Coordinates.Item1, Coordinates.Item2] = this;
     }
 
-    #region Debug
+    #endregion
 
-    //Debug
-    // private void ShowDebug()
-    // {
-    //     Debug.Log($"{gameObject.name} : Coordinates: {Coordinates}," +
-    //               $" Player: {PlayerType}, In Arrays.figures: {Arrays.CoordinatesOf(Arrays.figures, this)}");
-    // }
+    #region Debug
+    
+     private void DebugCoordinatesPlayerTypeAndCoordinatesInArray()
+     {
+         Debug.Log($"{gameObject.name} : Coordinates: {Coordinates}," +
+                   $" Player: {PlayerType}, In Arrays.figures: {Arrays.CoordinatesOf(Arrays.figures, this)}");
+     }
+
+    private void DebugCountInOppociteCornerAndIsWin()
+    {
+        Debug.Log(Arrays.CountOfCurrentPlayerFiguresInEnemyField(PlayerType));
+        if(Arrays.CheckIsWin(PlayerType)) Debug.Log($"Winner is {PlayerType}");
+    }
 
     #endregion
 }

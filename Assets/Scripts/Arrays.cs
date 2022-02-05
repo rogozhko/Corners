@@ -25,9 +25,11 @@ public class Arrays
         new Tuple<int, int>(2,5), new Tuple<int, int>(2,6), new Tuple<int, int>(2,7)
     };
 
-    public static bool CheckIsContain(int a, int b)
+
+    public static bool CheckIsAvaible()
     {
-        return figures[a, b] != null;
+        var mousePosition = Utils.GetRoundMousePosition();
+        return figures[mousePosition.Item1, mousePosition.Item2] != null;
     }
 
 
@@ -61,9 +63,9 @@ public class Arrays
 
         foreach (var figure in currentPlayerFigures)
         {
-            for (int i = 0; i < opponentCoordinates.Length; i++)
+            foreach (var t in opponentCoordinates)
             {
-                if (Equals(figure.Coordinates, opponentCoordinates[i]))
+                if (Equals(figure.Coordinates, t))
                 {
                     count++;
                 }
