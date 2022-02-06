@@ -72,6 +72,7 @@ public class Manager : MonoBehaviour
         if (DataHolder.LogicNumber == 1) CurrentLogic = new Logic1();
         if (DataHolder.LogicNumber == 2) CurrentLogic = new Logic2();
         if (DataHolder.LogicNumber == 3) CurrentLogic = new Logic3();
+        if (DataHolder.LogicNumber == 4) CurrentLogic = new DebugLogic();
     }
     
     private void Update()

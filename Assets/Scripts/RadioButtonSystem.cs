@@ -23,6 +23,7 @@ public class RadioButtonSystem : MonoBehaviour
         if(text == "Diagonal jump") DataHolder.LogicNumber = 1;
         if(text == "Vertical And Horizontal") DataHolder.LogicNumber = 2;
         if(text == "No Jump") DataHolder.LogicNumber = 3;
+        if(text == "Debug") DataHolder.LogicNumber = 4;
         
         SceneManager.LoadScene("Game");
     }
