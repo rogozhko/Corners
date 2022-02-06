@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Logic2 : ILogic
@@ -13,32 +14,18 @@ public class Logic2 : ILogic
         {
             RemoveFromArray(figure);
             SnapFigure(figure);
-            return;
+            // return;
         }
-        
-        
-        
-        // Курсор на враге
-        if (CheckIsEnemyFigure(Utils.GetRoundMousePosition()))
-        {
-            Debug.Log("Входит во врага");
-            BackToCurrentPosition(figure);
-            return;
-        }
-        
-        // Противник по вертикали и горизонтали
-        // if (CheckIsTwoStepAround())
+
+        Test();
+        RemoveFromArray(figure);
+        SnapFigure(figure);
+
+
+        // else
         // {
-        //     Debug.Log("Курсор на расстояние двух клеток");
-        //     // RemoveFromArray(figure);
-        //     // SnapFigure(figure);
         //     BackToCurrentPosition(figure);
         // }
-        
-        else
-        {
-            BackToCurrentPosition(figure);
-        }
     }
 
     #region Move
@@ -63,12 +50,74 @@ public class Logic2 : ILogic
 
     #endregion
 
+
+    // Если два шага вокруг
+    // Если соседей-противников не ноль
+    // Получить следующую координату от противника, согласно правилу
+    // Принадлежит 
+    // Сравнить нет ли там другой фигуры
+    // Поставить
+
+
+    // Если курсор принадлежит одной из четырех точек верх низ лево право на шаге 2
     
-    // Первая логика, ходит на одну клетку вокруг
-    private bool CheckIsOneStepAround()
+    // Если координата на той же оси, но на шаге 1 - противник
+    private void Test()
     {
-        var a = Arrays.GetMatrixAroundFigure(manager.CurrentFigure.Coordinates);
-        return Arrays.CheckIsBelongToMatrix(Utils.GetRoundMousePosition(), a);
+        // Если на координате не null выходим
+        if(Arrays.CheckIsOtherFigure()) return;
+        
+        // Координаты курсора
+        var cursorPos = Utils.GetRoundMousePosition();
+
+        // Массив с четыремя элементами на расстоянии 2 шага
+        var arrayOfFour = GetHorizontalAndVerticalElementsTwoStep();
+
+        foreach (var t in arrayOfFour)
+        {
+            if (Equals(cursorPos, t))
+            {
+                Debug.Log("Курсор в одной из четырех точек на расстоянии 2 клеток");
+            }
+        }
+
+
+    }
+
+
+    
+    
+    
+
+    
+    
+
+    // Проверить есть ли вокруг противники
+    private void GetEnemyNeighbour()
+    {
+        var a = GetHorizontalAndVerticalElementsOneStep();
+
+        foreach (var t in a)
+        {
+            if (CheckIsEnemyFigure(t)) Debug.Log($"Тут противник: {t}");
+        }
+    }
+
+    // Получить массив 4х координат по вертикали и горизонтали
+    private Tuple<int, int>[] GetHorizontalAndVerticalElementsOneStep()
+    {
+        var m = Arrays.GetMatrixAroundFigure(manager.CurrentFigure.Coordinates);
+        var fourCoordinates = new Tuple<int, int>[] {m[0, 1], m[2, 1], m[1, 0], m[1, 2]};
+
+        return fourCoordinates;
+    }
+
+    private Tuple<int, int>[] GetHorizontalAndVerticalElementsTwoStep()
+    {
+        var m = Arrays.GetDoubleMatrixAroundFigure(manager.CurrentFigure.Coordinates);
+        var fourCoordinates = new Tuple<int, int>[] {m[0, 2], m[4, 2], m[2, 0], m[2, 4]};
+
+        return fourCoordinates;
     }
 
 
@@ -76,16 +125,6 @@ public class Logic2 : ILogic
     {
         var a = Arrays.GetDoubleMatrixAroundFigure(manager.CurrentFigure.Coordinates);
         return Arrays.CheckIsBelongToMatrix(Utils.GetRoundMousePosition(), a);
-    }
-
-
-    // Получить массив 4х координат по вертикали и горизонтали
-    private Tuple<int, int>[] GetHorizontalAndVerticalElements()
-    {
-        var m = Arrays.GetMatrixAroundFigure(manager.CurrentFigure.Coordinates);
-        var fourCoordinates = new Tuple<int, int>[]{m[0,1], m[2,1], m[1,0], m[1,2]};
-        
-        return fourCoordinates;
     }
 
 
@@ -104,16 +143,15 @@ public class Logic2 : ILogic
         return Arrays.figures[coordinates.Item1, coordinates.Item2].PlayerType != manager.CurrentPlayer;
     }
     
-    
-    // У координаты получить:
-    // - есть ли фигура
-    // - противник? тип игрока
-    // - стоит ли фигура в одной из 4х координат
-
-
-
 
 
     // Сравнивает две координаты, отдает 
     // void
+
+    // Первая логика, ходит на одну клетку вокруг
+    private bool CheckIsOneStepAround()
+    {
+        var a = Arrays.GetMatrixAroundFigure(manager.CurrentFigure.Coordinates);
+        return Arrays.CheckIsBelongToMatrix(Utils.GetRoundMousePosition(), a);
+    }
 }

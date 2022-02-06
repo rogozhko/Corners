@@ -12,10 +12,10 @@ public class InputTest : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            manager.SetGameStateStart();
-        }
+        // if (Input.GetKeyDown(KeyCode.Q))
+        // {
+        //     manager.SetGameStateStart();
+        // }
 
         if (Input.GetKeyDown(KeyCode.W))
         {
@@ -27,9 +27,9 @@ public class InputTest : MonoBehaviour
             manager.SetGameStatePlayerTwoMove();
         }
 
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            manager.SetGameStateResult();
-        }
+        // if (Input.GetKeyDown(KeyCode.R))
+        // {
+        //     manager.SetGameStateResult();
+        // }
     }
 }

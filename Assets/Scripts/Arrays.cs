@@ -30,12 +30,6 @@ public class Arrays
     #endregion
 
 
-    public static bool CheckIsOtherFigure()
-    {
-        var mousePosition = Utils.GetRoundMousePosition();
-        return figures[mousePosition.Item1, mousePosition.Item2] != null;
-    }
-
     public static bool CheckIsWin(Player player)
     {
         return CountOfCurrentPlayerFiguresInEnemyField(player) == 9;
@@ -91,7 +85,7 @@ public class Arrays
         
         return matrixAround;
     }
-    
+
     public static Tuple<int, int>[,] GetDoubleMatrixAroundFigure(Tuple<int, int> coordinates)
     {
         Tuple<int, int>[,] matrixAround = new Tuple<int, int>[5, 5];
@@ -116,6 +110,13 @@ public class Arrays
 
         return false;
     }
+
+    public static bool CheckIsOtherFigure()
+    {
+        var mousePosition = Utils.GetRoundMousePosition();
+        return figures[mousePosition.Item1, mousePosition.Item2] != null;
+    }
+    
 
     #endregion
 
