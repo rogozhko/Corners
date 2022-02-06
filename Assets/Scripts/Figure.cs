@@ -33,7 +33,7 @@ public class Figure : MonoBehaviour
     {
     }
 
-    private Vector3 currentPos;
+    // private Vector3 currentPos;
 
 
     #region Events
@@ -45,7 +45,7 @@ public class Figure : MonoBehaviour
         manager.CurrentFigure = this;
 
         dragOffset = transform.position - Utils.GetMousePosition();
-        currentPos = transform.position;
+        // currentPos = transform.position;
     }
 
     private void OnMouseDrag()

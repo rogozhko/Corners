@@ -2,49 +2,20 @@ using System;
 using UnityEngine;
 
 
-public class Logic2 : ILogic
+public class Logic2 : Logic
 {
     Manager manager = Manager.Instance;
 
 
-    public void Run()
+    public override void Run()
     {
-        // Если ячейка рядом и нет другой фигуры
-        if (CheckIsOneStepAround() && !Arrays.CheckIsOtherFigure())
-        {
-            RemoveFromArray(manager.CurrentFigure);
-            SnapFigure(manager.CurrentFigure);
-        }
-        else
-        {
-            BackToCurrentPosition(manager.CurrentFigure);
-        }
+        base.Run();
 
         VerticalAndHorizontalLogic();
     }
 
-    #region Move
 
-    private void BackToCurrentPosition(Figure figure)
-    {
-        figure.transform.position = Utils.GetPositionFromCoordinates(figure.Coordinates);
-    }
-
-    private void RemoveFromArray(Figure figure)
-    {
-        Arrays.figures[figure.Coordinates.Item1, figure.Coordinates.Item2] = null;
-    }
-
-    private void SnapFigure(Figure figure)
-    {
-        var mousePosition = Utils.GetRoundMousePosition();
-        var position = Utils.GetPositionFromCoordinates(mousePosition);
-        figure.transform.position = position;
-        figure.Coordinates = mousePosition;
-    }
-
-    #endregion
-
+    #region Logic2
 
     private void VerticalAndHorizontalLogic()
     {
@@ -55,7 +26,7 @@ public class Logic2 : ILogic
         var cursorPos = Utils.GetRoundMousePosition();
 
         // Массив с четыремя элементами на расстоянии 2 шага
-        var arrayOfFour = GetHorizontalAndVerticalElementsTwoStep();
+        var arrayOfFour = GetFourHorizontalAndVerticalElementsTwoStep();
 
         Tuple<int, int> nextPos = null;
 
@@ -70,25 +41,27 @@ public class Logic2 : ILogic
             nextPos = new Tuple<int, int>(arrayOfFour[1].Item1 - 1, arrayOfFour[1].Item2);
             Debug.Log($"{manager.CurrentFigure.Coordinates} Курсор в нижней точке");
         }
+
         if (Equals(arrayOfFour[2], cursorPos))
         {
             nextPos = new Tuple<int, int>(arrayOfFour[2].Item1, arrayOfFour[2].Item2 + 1);
             Debug.Log($"{manager.CurrentFigure.Coordinates} Курсор в левой точке");
         }
+
         if (Equals(arrayOfFour[3], cursorPos))
         {
             nextPos = new Tuple<int, int>(arrayOfFour[3].Item1, arrayOfFour[3].Item2 - 1);
             Debug.Log($"{manager.CurrentFigure.Coordinates} Курсор в правой точке");
         }
-        
-        
+
+
         // Проверить если ли враг на nextPos , на позиции плюс одна клетка к текущей фигуре
-        if (nextPos != null && CheckIsEnemyFigure(nextPos))
+        if (nextPos != null && Arrays.CheckIsEnemyFigure(nextPos))
         {
-            Debug.Log("Поставить сюда фигуру");
+            // Debug.Log("Поставить сюда фигуру");
             Debug.Log($"Противник на: {nextPos}");
             RemoveFromArray(manager.CurrentFigure);
-            SnapFigure(manager.CurrentFigure);
+            MoveFigure(manager.CurrentFigure);
         }
         else
         {
@@ -96,17 +69,7 @@ public class Logic2 : ILogic
         }
     }
 
-
-    // Получить массив 4х координат по вертикали и горизонтали
-    private Tuple<int, int>[] GetHorizontalAndVerticalElementsOneStep()
-    {
-        var m = Arrays.GetMatrixAroundFigure(manager.CurrentFigure.Coordinates);
-        var fourCoordinates = new Tuple<int, int>[] {m[0, 1], m[2, 1], m[1, 0], m[1, 2]};
-
-        return fourCoordinates;
-    }
-
-    private Tuple<int, int>[] GetHorizontalAndVerticalElementsTwoStep()
+    private Tuple<int, int>[] GetFourHorizontalAndVerticalElementsTwoStep()
     {
         var m = Arrays.GetDoubleMatrixAroundFigure(manager.CurrentFigure.Coordinates);
         var fourCoordinates = new Tuple<int, int>[] {m[0, 2], m[4, 2], m[2, 0], m[2, 4]};
@@ -114,33 +77,5 @@ public class Logic2 : ILogic
         return fourCoordinates;
     }
 
-
-    private bool CheckIsTwoStepAround()
-    {
-        var a = Arrays.GetDoubleMatrixAroundFigure(manager.CurrentFigure.Coordinates);
-        return Arrays.CheckIsBelongToMatrix(Utils.GetRoundMousePosition(), a);
-    }
-
-
-    private bool CheckIsEnemyFigure(Tuple<int, int> coordinates)
-    {
-        var array = Arrays.figures;
-
-        if (coordinates.Item1 < 0 || coordinates.Item1 >= array.GetLength(0) ||
-            coordinates.Item2 < 0 || coordinates.Item2 >= array.GetLength(1))
-        {
-            return false;
-        }
-
-        if (Arrays.figures[coordinates.Item1, coordinates.Item2] == null) return false;
-
-        return Arrays.figures[coordinates.Item1, coordinates.Item2].PlayerType != manager.CurrentPlayer;
-    }
-
-    // Первая логика, ходит на одну клетку вокруг
-    private bool CheckIsOneStepAround()
-    {
-        var a = Arrays.GetMatrixAroundFigure(manager.CurrentFigure.Coordinates);
-        return Arrays.CheckIsBelongToMatrix(Utils.GetRoundMousePosition(), a);
-    }
+    #endregion
 }

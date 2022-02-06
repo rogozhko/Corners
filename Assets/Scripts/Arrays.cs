@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Arrays
 {
-    private Manager manager = Manager.Instance;
+    private static Manager manager = Manager.Instance;
 
 
     public static Figure[,] figures = new Figure[8, 8];
@@ -29,45 +29,7 @@ public class Arrays
 
     #endregion
 
-
-    public static bool CheckIsWin(Player player)
-    {
-        return CountOfCurrentPlayerFiguresInEnemyField(player) == 9;
-    }
-
-    public static int CountOfCurrentPlayerFiguresInEnemyField(Player currentPlayer)
-    {
-        var count = 0;
-        var currentPlayerFigures = new List<Figure>();
-
-        var opponentCoordinates = currentPlayer == Player.One ? playerTwoFigureCoordinates : playerOneFigureCoordinates;
-
-        for (int i = 0; i < figures.GetLength(0); ++i)
-        {
-            for (int j = 0; j < figures.GetLength(1); ++j)
-            {
-                if (figures[i, j] == null) continue;
-                if (figures[i, j].PlayerType == currentPlayer)
-                {
-                    currentPlayerFigures.Add(figures[i, j]);
-                }
-            }
-        }
-
-        foreach (var coordinates in currentPlayerFigures)
-        {
-            foreach (var t in opponentCoordinates)
-            {
-                if (Equals(coordinates.Coordinates, t))
-                {
-                    count++;
-                }
-            }
-        }
-
-        return count;
-    }
-
+    
 
     #region Matrix
 
@@ -117,6 +79,20 @@ public class Arrays
         return figures[mousePosition.Item1, mousePosition.Item2] != null;
     }
     
+    public static bool CheckIsEnemyFigure(Tuple<int, int> coordinates)
+    {
+        var array = Arrays.figures;
+
+        if (coordinates.Item1 < 0 || coordinates.Item1 >= array.GetLength(0) ||
+            coordinates.Item2 < 0 || coordinates.Item2 >= array.GetLength(1))
+        {
+            return false;
+        }
+
+        if (Arrays.figures[coordinates.Item1, coordinates.Item2] == null) return false;
+
+        return Arrays.figures[coordinates.Item1, coordinates.Item2].PlayerType != manager.CurrentPlayer;
+    }
 
     #endregion
 

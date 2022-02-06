@@ -6,10 +6,9 @@ public class GameStatePlayerOneMove: IGameState
     
     public void Enter()
     {
-
-        
-        Debug.Log("Enter Player One Move State");
+        // Debug.Log("First player turn");
         manager.CurrentPlayer = Player.One;
+        manager.uiManager.UpdateStateUI();
     }
 
     public void Exit()

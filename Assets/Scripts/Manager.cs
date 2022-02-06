@@ -40,23 +40,28 @@ public class Manager : MonoBehaviour
 
     public GameField GameField { get; set; }
 
-    public ILogic CurrentLogic { get; set; }
+    public Logic CurrentLogic { get; set; }
+
+    #region UI -----------------------------
+
+    [SerializeField] public UIManager uiManager;
+    public int FirstPlayerMoves { get; set; }
+    public int SecondPlayerMoves { get; set; }
+
+    #endregion
     
+    #endregion
 
     private void Awake()
     {
         Instance = this;
         GameField = GetComponent<GameField>();
     }
-
-    #endregion
-    
-
     private void Start()
     {
         InitGameStates();
         SetGameStateByDefault();
-        CurrentLogic = new Logic3();
+        CurrentLogic = new DebugLogic();
     }
 
     private void Update()
@@ -118,6 +123,40 @@ public class Manager : MonoBehaviour
         var state = GetGameState<GameStateResult>();
         SetGameState(state);
     }
+
+    #endregion
+
+
+    #region Debug ChangeColor
+
+    private Color currentColor = Color.black;
+    
+    
+    public void ChangeFiguresColor()
+    {
+        foreach (var figure in Arrays.figures)
+        {
+            if (figure == null || figure.PlayerType == CurrentPlayer) continue;
+            var current = figure.GetComponent<MeshRenderer>().material.color;
+            currentColor = current;
+            
+            current = Color.black;
+            var some = 0;
+            figure.GetComponent<MeshRenderer>().material
+                .SetColor("_Color", new Color(current.r + some, current.g + some, current.b + some));
+        }
+    }
+    public void BackFiguresColor()
+    {
+        foreach (var figure in Arrays.figures)
+        {
+            if (figure == null || figure.PlayerType == CurrentPlayer) continue;
+            var current = figure.GetComponent<MeshRenderer>().material.color;
+            figure.GetComponent<MeshRenderer>().material
+                .SetColor("_Color", currentColor);
+        }
+    }
+    
 
     #endregion
 }
