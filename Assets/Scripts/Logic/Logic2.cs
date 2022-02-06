@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class Logic2 : ILogic
 {
     Manager manager = Manager.Instance;
@@ -16,16 +17,12 @@ public class Logic2 : ILogic
             SnapFigure(figure);
             // return;
         }
+        else
+        {
+            BackToCurrentPosition(manager.CurrentFigure);
+        }
 
-        Test();
-        RemoveFromArray(figure);
-        SnapFigure(figure);
-
-
-        // else
-        // {
-        //     BackToCurrentPosition(figure);
-        // }
+        VerticalAndHorizontalLogic();
     }
 
     #region Move
@@ -51,57 +48,56 @@ public class Logic2 : ILogic
     #endregion
 
 
-    // Если два шага вокруг
-    // Если соседей-противников не ноль
-    // Получить следующую координату от противника, согласно правилу
-    // Принадлежит 
-    // Сравнить нет ли там другой фигуры
-    // Поставить
-
-
-    // Если курсор принадлежит одной из четырех точек верх низ лево право на шаге 2
-    
-    // Если координата на той же оси, но на шаге 1 - противник
-    private void Test()
+    private void VerticalAndHorizontalLogic()
     {
         // Если на координате не null выходим
-        if(Arrays.CheckIsOtherFigure()) return;
-        
+        if (Arrays.CheckIsOtherFigure()) return;
+
         // Координаты курсора
         var cursorPos = Utils.GetRoundMousePosition();
 
         // Массив с четыремя элементами на расстоянии 2 шага
         var arrayOfFour = GetHorizontalAndVerticalElementsTwoStep();
 
-        foreach (var t in arrayOfFour)
+        Tuple<int, int> nextPos = null;
+
+        if (Equals(arrayOfFour[0], cursorPos))
         {
-            if (Equals(cursorPos, t))
-            {
-                Debug.Log("Курсор в одной из четырех точек на расстоянии 2 клеток");
-            }
+            nextPos = new Tuple<int, int>(arrayOfFour[0].Item1 + 1, arrayOfFour[0].Item2);
+            Debug.Log($"{manager.CurrentFigure.Coordinates} Курсор в верхней точке");
         }
 
-
-    }
-
-
-    
-    
-    
-
-    
-    
-
-    // Проверить есть ли вокруг противники
-    private void GetEnemyNeighbour()
-    {
-        var a = GetHorizontalAndVerticalElementsOneStep();
-
-        foreach (var t in a)
+        if (Equals(arrayOfFour[1], cursorPos))
         {
-            if (CheckIsEnemyFigure(t)) Debug.Log($"Тут противник: {t}");
+            nextPos = new Tuple<int, int>(arrayOfFour[1].Item1 - 1, arrayOfFour[1].Item2);
+            Debug.Log($"{manager.CurrentFigure.Coordinates} Курсор в нижней точке");
+        }
+        if (Equals(arrayOfFour[2], cursorPos))
+        {
+            nextPos = new Tuple<int, int>(arrayOfFour[2].Item1, arrayOfFour[2].Item2 + 1);
+            Debug.Log($"{manager.CurrentFigure.Coordinates} Курсор в левой точке");
+        }
+        if (Equals(arrayOfFour[3], cursorPos))
+        {
+            nextPos = new Tuple<int, int>(arrayOfFour[3].Item1, arrayOfFour[3].Item2 - 1);
+            Debug.Log($"{manager.CurrentFigure.Coordinates} Курсор в правой точке");
+        }
+        
+        
+        // Проверить если ли враг на nextPos , на позиции плюс одна клетка к текущей фигуре
+        if (nextPos != null && CheckIsEnemyFigure(nextPos))
+        {
+            Debug.Log("Поставить сюда фигуру");
+            Debug.Log($"Противник на: {nextPos}");
+            RemoveFromArray(manager.CurrentFigure);
+            SnapFigure(manager.CurrentFigure);
+        }
+        else
+        {
+            BackToCurrentPosition(manager.CurrentFigure);
         }
     }
+
 
     // Получить массив 4х координат по вертикали и горизонтали
     private Tuple<int, int>[] GetHorizontalAndVerticalElementsOneStep()
@@ -142,11 +138,6 @@ public class Logic2 : ILogic
 
         return Arrays.figures[coordinates.Item1, coordinates.Item2].PlayerType != manager.CurrentPlayer;
     }
-    
-
-
-    // Сравнивает две координаты, отдает 
-    // void
 
     // Первая логика, ходит на одну клетку вокруг
     private bool CheckIsOneStepAround()
