@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -8,14 +7,13 @@ public class Logic2 : ILogic
     Manager manager = Manager.Instance;
 
 
-    public void Run(Figure figure)
+    public void Run()
     {
         // Если ячейка рядом и нет другой фигуры
         if (CheckIsOneStepAround() && !Arrays.CheckIsOtherFigure())
         {
-            RemoveFromArray(figure);
-            SnapFigure(figure);
-            // return;
+            RemoveFromArray(manager.CurrentFigure);
+            SnapFigure(manager.CurrentFigure);
         }
         else
         {

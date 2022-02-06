@@ -63,7 +63,7 @@ public class Figure : MonoBehaviour
         //Если не этот игрок - выходим
         if (manager.CurrentPlayer != PlayerType) return;
 
-        manager.CurrentLogic.Run(this);
+        manager.CurrentLogic.Run();
     }
 
     #endregion
