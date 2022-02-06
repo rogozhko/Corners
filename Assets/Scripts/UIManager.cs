@@ -1,15 +1,19 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
+
+public delegate void RestartGame();
 
 public class UIManager : MonoBehaviour
 {
+    public event RestartGame OnRestartGame;
+    
     private Manager manager;
     
     [SerializeField] private TMP_Text text;
     [SerializeField] private TMP_Text firstPlayerMoves;
     [SerializeField] private TMP_Text secondPlayerMoves;
+    [SerializeField] private GameObject panel;
 
     private void Start()
     {
@@ -36,6 +40,21 @@ public class UIManager : MonoBehaviour
     {
         text.text = inText;
     }
-    
+
+    public void ShowWinPanel(string text)
+    {
+        panel.GetComponentInChildren<TMP_Text>().text = text;
+        panel.gameObject.SetActive(true);
+    }
+
+    public void Restart()
+    {
+        OnRestartGame?.Invoke();
+    }
+
+    public void Exit()
+    {
+        SceneManager.LoadScene("Lobby");
+    }
     
 }

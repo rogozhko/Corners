@@ -1,14 +1,11 @@
 using System;
 using System.Collections.Generic;
 
-public class WinLogic
+public static class WinLogic
 {
-    Manager manager = Manager.Instance;
-
-
     public static bool CheckIsWin(Player player)
     {
-        return CountFiguresInEnemyField(player) == 9;
+        return CountFiguresInEnemyField(player) == DataHolder.WinCount;
     }
 
 

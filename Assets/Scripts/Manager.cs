@@ -60,9 +60,7 @@ public class Manager : MonoBehaviour
     private void Start()
     {
         SetLogic();
-        // Debug.Log(CurrentLogic);
-        Debug.Log(CurrentPlayer);
-
+        
         InitGameStates();
         SetGameStateByDefault();
     }

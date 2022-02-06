@@ -17,16 +17,16 @@ public class InputTest : MonoBehaviour
         //     manager.SetGameStateStart();
         // }
 
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            manager.SetGameStatePlayerOneMove();
-        }
-        
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            manager.SetGameStatePlayerTwoMove();
-        }
-
+        // if (Input.GetKeyDown(KeyCode.W))
+        // {
+        //     manager.SetGameStatePlayerOneMove();
+        // }
+        //
+        // if (Input.GetKeyDown(KeyCode.E))
+        // {
+        //     manager.SetGameStatePlayerTwoMove();
+        // }
+        //
         // if (Input.GetKeyDown(KeyCode.R))
         // {
         //     manager.SetGameStateResult();

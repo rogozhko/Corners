@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 public class Logic
 {
@@ -26,9 +27,17 @@ public class Logic
         if (manager.CurrentPlayer == Player.Two) manager.SecondPlayerMoves++;
         
         manager.uiManager.UpdateStateUI();
-
+        
+        if (WinLogic.CheckIsWin(manager.CurrentPlayer))
+        { 
+            manager.SetGameStateResult();
+            return;
+        }
+        
         ChangePlayer();
     }
+
+    
 
     protected void BackToCurrentPosition(Figure figure)
     {
@@ -63,7 +72,6 @@ public class Logic
     }
 
     #endregion
-
 
     #region For All Logics
 

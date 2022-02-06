@@ -34,6 +34,7 @@ public class Logic1 : Logic
         {
             nextPos = new Tuple<int, int>(arrayOfFour[0].Item1 + 1, arrayOfFour[0].Item2 + 1);
             Debug.Log($"{manager.CurrentFigure.Coordinates} Курсор в верхнем левом углу");
+            Debug.Log(manager.CurrentPlayer);
         }
         if (Equals(arrayOfFour[1], cursorPos))
         {
