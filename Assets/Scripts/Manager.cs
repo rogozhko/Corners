@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public enum Player
 {
@@ -44,7 +43,7 @@ public class Manager : MonoBehaviour
 
     #region UI -----------------------------
 
-    [SerializeField] public UIManager uiManager;
+    public UIManager uiManager { get; set; }
     public int FirstPlayerMoves { get; set; }
     public int SecondPlayerMoves { get; set; }
 
@@ -56,14 +55,25 @@ public class Manager : MonoBehaviour
     {
         Instance = this;
         GameField = GetComponent<GameField>();
+        uiManager = FindObjectOfType<UIManager>();
     }
     private void Start()
     {
+        SetLogic();
+        // Debug.Log(CurrentLogic);
+        Debug.Log(CurrentPlayer);
+
         InitGameStates();
         SetGameStateByDefault();
-        CurrentLogic = new DebugLogic();
     }
 
+    private void SetLogic()
+    {
+        if (DataHolder.LogicNumber == 1) CurrentLogic = new Logic1();
+        if (DataHolder.LogicNumber == 2) CurrentLogic = new Logic2();
+        if (DataHolder.LogicNumber == 3) CurrentLogic = new Logic3();
+    }
+    
     private void Update()
     {
         currentState?.Update();

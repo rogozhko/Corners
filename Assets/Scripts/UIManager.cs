@@ -32,5 +32,10 @@ public class UIManager : MonoBehaviour
         secondPlayerMoves.text = manager.SecondPlayerMoves.ToString();
     }
     
+    public void UpdateStateUI(string inText)
+    {
+        text.text = inText;
+    }
+    
     
 }

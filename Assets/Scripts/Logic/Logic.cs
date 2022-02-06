@@ -24,6 +24,8 @@ public class Logic
     {
         if (manager.CurrentPlayer == Player.One) manager.FirstPlayerMoves++;
         if (manager.CurrentPlayer == Player.Two) manager.SecondPlayerMoves++;
+        
+        manager.uiManager.UpdateStateUI();
 
         ChangePlayer();
     }
