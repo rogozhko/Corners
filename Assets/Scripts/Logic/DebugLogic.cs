@@ -4,6 +4,7 @@ public class DebugLogic : Logic
     {
         Manager manager = Manager.Instance;
         
+        
         if (!Arrays.CheckIsOtherFigure())
         {
             RemoveFromArray(manager.CurrentFigure);

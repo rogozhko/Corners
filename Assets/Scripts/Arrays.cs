@@ -76,6 +76,14 @@ public class Arrays
     public static bool CheckIsOtherFigure()
     {
         var mousePosition = Utils.GetRoundMousePosition();
+        var array = Arrays.figures;
+        
+        if (mousePosition.Item1 < 0 || mousePosition.Item1 >= array.GetLength(0) ||
+            mousePosition.Item2 < 0 || mousePosition.Item2 >= array.GetLength(1))
+        {
+            return false;
+        }
+        
         return figures[mousePosition.Item1, mousePosition.Item2] != null;
     }
     

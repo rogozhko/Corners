@@ -26,6 +26,8 @@ public class GameStateResult : IGameState
 
     public void RestartGame()
     {
+        
+        
         Debug.Log("Restart Game");
         SceneManager.LoadScene("Lobby");
     }

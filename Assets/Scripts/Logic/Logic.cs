@@ -7,6 +7,11 @@ public class Logic
 
     public virtual void Run()
     {
+        if (Utils.CheckIsOutOfFieldEdge())
+        {
+            BackToCurrentPosition(manager.CurrentFigure);
+        }
+
         // Если ячейка рядом и нет другой фигуры
         if (CheckIsOneStepAround() && !Arrays.CheckIsOtherFigure())
         {

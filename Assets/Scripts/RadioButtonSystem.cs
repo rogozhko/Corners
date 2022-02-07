@@ -20,14 +20,14 @@ public class RadioButtonSystem : MonoBehaviour
         
         Debug.Log(toggle.GetComponentInChildren<Text>().text);
 
-        DataHolder.WinCount = 9;
+        // DataHolder.LogicNumber = 1;
         
         if(text == "Diagonal jump") DataHolder.LogicNumber = 1;
         if(text == "Vertical And Horizontal") DataHolder.LogicNumber = 2;
         if(text == "No Jump") DataHolder.LogicNumber = 3;
         if (text == "Debug")
         {
-            DataHolder.WinCount = 1;
+            DataHolder.WinCount = 9;
             DataHolder.LogicNumber = 4;
         }
         

@@ -31,10 +31,7 @@ public class Manager : MonoBehaviour
     public Figure CurrentFigure
     {
         get => currentFigure;
-        set
-        {
-            currentFigure = value;
-        }
+        set { currentFigure = value; }
     }
 
     public GameField GameField { get; set; }
@@ -48,7 +45,7 @@ public class Manager : MonoBehaviour
     public int SecondPlayerMoves { get; set; }
 
     #endregion
-    
+
     #endregion
 
     private void Awake()
@@ -57,10 +54,12 @@ public class Manager : MonoBehaviour
         GameField = GetComponent<GameField>();
         uiManager = FindObjectOfType<UIManager>();
     }
+
     private void Start()
     {
         SetLogic();
-        
+        Debug.Log(CurrentLogic);
+
         InitGameStates();
         SetGameStateByDefault();
     }
@@ -72,7 +71,7 @@ public class Manager : MonoBehaviour
         if (DataHolder.LogicNumber == 3) CurrentLogic = new Logic3();
         if (DataHolder.LogicNumber == 4) CurrentLogic = new DebugLogic();
     }
-    
+
     private void Update()
     {
         currentState?.Update();
@@ -139,8 +138,8 @@ public class Manager : MonoBehaviour
     #region Debug ChangeColor
 
     private Color currentColor = Color.black;
-    
-    
+
+
     public void ChangeFiguresColor()
     {
         foreach (var figure in Arrays.figures)
@@ -148,13 +147,14 @@ public class Manager : MonoBehaviour
             if (figure == null || figure.PlayerType == CurrentPlayer) continue;
             var current = figure.GetComponent<MeshRenderer>().material.color;
             currentColor = current;
-            
+
             current = Color.black;
             var some = 0;
             figure.GetComponent<MeshRenderer>().material
                 .SetColor("_Color", new Color(current.r + some, current.g + some, current.b + some));
         }
     }
+
     public void BackFiguresColor()
     {
         foreach (var figure in Arrays.figures)
@@ -165,7 +165,6 @@ public class Manager : MonoBehaviour
                 .SetColor("_Color", currentColor);
         }
     }
-    
 
     #endregion
 }
