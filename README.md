@@ -1,2 +1,6 @@
-# Corners
-Simple corners game
+# Corners game
+
+Игра Уголки. Задача: переставить все фигуры в угол противника. Варианты игры: можно перепрыгивать через фигуры по горизонтали и вертикали, можно перепрыгивать по диагонали, можно ходить только на одну клетку.
+
+
+![Corners game](https://github.com/rogozhko/Corners/blob/main/Preview/Corners.gif)
